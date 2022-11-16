@@ -1,0 +1,108 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background:none; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+
+.tab-btn1 , .tab-btn2
+{
+  border-radius: 0px !important;
+}
+.tab-btn1:hover
+{
+  /* background-color:!important; */
+  color: white !important;
+} 
+.tab-btn2:hover
+{
+  background-color: #5E17EB !important;
+  color: white !important;
+} 
+.tab-btn1:focus
+{
+  background-color: #5E17EB !important;
+  color: white !important;
+} 
+.tab-btn2:focus
+{
+  background-color: #5E17EB !important;
+  color: white !important;
+} 
+.login-back
+{
+  background-image: url('./images/login-back.png');
+  height: 100vh;
+}
+.login-form
+{
+  margin-top: 180px !important;
+}
+@media only screen and (max-width: 600px) {
+  .card
+  {
+    width: 100% !important;
+  }
+  /* .description-container .description-heading , p
+  {
+    margin-top: 300px !important;
+  } */
+
+  .product-content
+  {
+    margin-bottom: 400px;
+  }
+  .image-section
+  {
+    width: 100% !important;
+    margin-left: auto !important;
+    /* margin-right: auto !important; */
+    margin-top: 48px;
+  
+  }
+  .booksheading
+  {
+    /* display: inline-flex !important; */
+text-align: center !important;
+  }
+  .booksheading h4
+  {
+    /* display: inline-flex !important; */
+text-align: center !important;
+width: 100% !important;
+  }
+  .booksheading Link{
+    margin-top: 0px !important;
+  }
+
+
+}
+input::placeholder
+{
+  font-size: 13px ;
+}
+.cart-checkout:disabled
+{
+ cursor: not-allowed !important;
+}
