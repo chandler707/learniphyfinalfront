@@ -11,7 +11,7 @@ import Button from "./Button";
 import { removeFromCart } from "../Redux/shopping/shopping-action";
 import { useDispatch } from "react-redux";
 import MenuItem from "@mui/material/MenuItem";
-import profile from "../images/profile.gif"
+import profile from "../images/profile.gif";
 import Menu from "@mui/material/Menu";
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,11 +29,10 @@ const Navbar = () => {
   const [product, setProduct] = useState({});
   const dispatch = useDispatch();
 
-
   const Remove_cart = (e, item) => {
     // e.preventDefault();
 
-    console.log(Remove_cart)
+    console.log("this is item", item);
     dispatch(removeFromCart(item));
   };
   const logOut = () => {
@@ -41,7 +40,6 @@ const Navbar = () => {
     navigate("/login");
   };
   useEffect(() => {
-
     let token = localStorage.getItem("token");
     // console.log(id)
     if (!token) {
@@ -267,7 +265,10 @@ const Navbar = () => {
                 >
                   <MenuItem>
                     {" "}
-                    <Link to="/profile" className="text-dark text-decoration-none">
+                    <Link
+                      to="/profile"
+                      className="text-dark text-decoration-none"
+                    >
                       {" "}
                       Profile{" "}
                     </Link>
@@ -350,11 +351,17 @@ const Navbar = () => {
                         src="https://img.freepik.com/free-vector/empty-concept-illustration_114360-1188.jpg?w=740&t=st=1667813839~exp=1667814439~hmac=8a3f9d62e3fc2ef2e5f2e80da6ddce45dcefeca970b25ee888c40855cece48ab"
                         height={200}
                       />
-                      <h6 className="fw-bold">{ }</h6>
+                      <h6 className="fw-bold">{}</h6>
                     </div>
                   ) : (
                     cartData?.cart?.map((item) => {
-                      const { id, thumbnail_image, name, price_without_tax, qty } = item;
+                      const {
+                        id,
+                        thumbnail_image,
+                        name,
+                        price_without_tax,
+                        qty,
+                      } = item;
                       const itemTotal = price_without_tax * qty;
 
                       return (
@@ -366,20 +373,37 @@ const Navbar = () => {
                               height={"150px"}
                               className="w-100"
                             />
-                            <p className=" text-center fw-bold mt-2 mb-0" style={{ textTransform: "capitalize" }}>{name}</p>
+                            <p
+                              className=" text-center fw-bold mt-2 mb-0"
+                              style={{ textTransform: "capitalize" }}
+                            >
+                              {name}
+                            </p>
                             <p></p>
-
                           </figure>
                           <div className="cart_items_info ">
                             <div className=" foot mt-3 w-100">
                               {/* <Button /> */}
-                              <h5 className="price fw-bold w-100 " style={{ marginTop: "-20px", fontFamily: "segoe ui symbol" }}>
+                              <h5
+                                className="price fw-bold w-100 "
+                                style={{
+                                  marginTop: "-20px",
+                                  fontFamily: "segoe ui symbol",
+                                }}
+                              >
                                 ₹ {itemTotal.toLocaleString()}
                                 <button
                                   type="button"
-                                  className=" cart-checkout btn mb-4 fw-bolder text-dark mt-3  " data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove Cart"
-                                  onClick={(e) => Remove_cart(item.id)}
-                                  style={{ borderRadius: "0px", backgroundColor: "lightgrey", marginLeft: "255px" }}
+                                  className=" cart-checkout btn mb-4 fw-bolder text-dark mt-3  "
+                                  data-bs-toggle="tooltip"
+                                  data-bs-placement="top"
+                                  data-bs-title="Remove Cart"
+                                  onClick={(e) => Remove_cart(e, item._id)}
+                                  style={{
+                                    borderRadius: "0px",
+                                    backgroundColor: "lightgrey",
+                                    marginLeft: "255px",
+                                  }}
                                 >
                                   <i class="fa-solid fa-xmark"></i>
                                 </button>
@@ -402,7 +426,6 @@ const Navbar = () => {
                             <span>&times;</span>
                           </Link> */}
                           </div>
-
                         </div>
                       );
                     })
@@ -418,8 +441,6 @@ const Navbar = () => {
                   >
                     Checkout
                   </button>
-
-
                 </Link>
               </div>
             </div>

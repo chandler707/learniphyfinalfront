@@ -7,16 +7,16 @@ export const addToCart = (item) => {
     payload: item,
   };
 };
-// export const removeFromCart = (itemId) => {
-//   console.log("hhh", itemId);
-//   return {
-//     type: actionType.REMOVE_FROM_CART,
-//     payload: itemId,
-//   };
-// };
-export const removeFromCart = info => {
+export const emptyCart = (itemId) => {
+  console.log("hhh", itemId);
   return {
-    type: "REMOVE_CART",
-    payload: info
+    type: actionType.EMPTY_CART,
+    payload: itemId,
   };
-};  
+};
+export const removeFromCart = (info) => {
+  return {
+    type: actionType.REMOVE_FROM_CART,
+    payload: info,
+  };
+};

@@ -22,6 +22,8 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { emptyCart } from "../Redux/shopping/shopping-action";
+import { useDispatch } from "react-redux";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -45,7 +47,13 @@ const Billing = () => {
   const [cityListBill, setCityListBill] = useState([]);
   const [cod, setCod] = useState(false);
   const [razorpay, setRazorpay] = useState(false);
+  const [ship, setShip] = useState(false);
+  const [bill, setBill] = useState(false);
+  const [pay, setPay] = useState(false);
+  const [setting, setSetting] = useState({});
+  const [subtotal, setSubtotal] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cod");
+  const dispatch = useDispatch();
 
   function loadScript(src) {
     return new Promise((resolve) => {
@@ -62,6 +70,24 @@ const Billing = () => {
   }
 
   async function displayRazorpay() {
+    if (
+      !addressData?.shipping_address ||
+      !addressData?.shipping_state ||
+      !addressData?.shipping_city ||
+      !addressData?.shipping_pin_code ||
+      !addressData?.shipping_landmark ||
+      !addressData?.billing_address ||
+      !addressData?.billing_state ||
+      !addressData?.billing_city ||
+      !addressData?.billing_pin_code ||
+      !addressData?.billing_landmark
+    ) {
+      setLoading(false);
+      setType("error");
+      setMessage("please fill all fields of the address");
+      setOpen(true);
+      return;
+    }
     let finalAmount = 0;
     if (paymentMethod !== "cod") {
       const res = await loadScript(
@@ -90,14 +116,11 @@ const Billing = () => {
       console.log("result data", result.data);
       const { amount, order_id, currency } = result.data;
       console.log("datatattta", amount, currency);
-
-      let setting = await GetSetting({ app_id: app_id });
-      if (setting && setting.status !== 1) {
+      if (!setting) {
         return;
       }
-
       const options = {
-        key: setting.data.rzp_key_id, // Enter the Key ID generated from the Dashboard
+        key: setting?.rzp_key_id, // Enter the Key ID generated from the Dashboard
         amount: amount.toString(),
         currency: currency,
         name: "Dobwal classess",
@@ -146,6 +169,7 @@ const Billing = () => {
             payment_id: data.razorpayPaymentId,
             app_id: app_id,
             final_ammount: finalAmount,
+            sub_total: subtotal,
 
             user_id: userId,
             order_data: { ...addressData },
@@ -154,6 +178,9 @@ const Billing = () => {
           console.log("razorpay", result.message);
 
           alert(result.message);
+          if (result.status === 1) {
+            dispatch(emptyCart(""));
+          }
         },
         prefill: {
           name: "Soumya Dey",
@@ -197,7 +224,9 @@ const Billing = () => {
         payment_method: "cod",
 
         app_id: app_id,
-        final_ammount: finalAmount,
+        final_ammount: finalAmount + setting?.shipping_charges,
+        sub_total: subtotal,
+        shipping_charges: setting?.shipping_charges,
 
         user_id: userId,
         order_data: { ...addressData },
@@ -206,6 +235,9 @@ const Billing = () => {
       console.log("razorpay", result.message);
 
       alert(result.message);
+      if (result.status === 1) {
+        dispatch(emptyCart(""));
+      }
     }
   }
 
@@ -230,6 +262,28 @@ const Billing = () => {
   }, []);
   const submitCheckout = async () => {};
   useEffect(() => {
+    setShip(true);
+
+    const set = async () => {
+      let setting = await GetSetting({ app_id: app_id });
+      if (setting && setting.status === 1) {
+        if (cartData?.cart.length > 0) {
+          let sub = 0;
+          cartData?.cart.map((element) => {
+            sub =
+              sub +
+              (parseFloat(element.mrp) *
+                element.qty *
+                (100 - parseFloat(element.discount)) *
+                (100 + parseFloat(element.tax))) /
+                10000;
+          });
+          setSubtotal(sub);
+        }
+        setSetting(setting.data);
+      }
+    };
+    set();
     let userId = localStorage.getItem("user_id");
 
     if (userId) {
@@ -240,6 +294,28 @@ const Billing = () => {
         let res = await Get_address({ app_id: app_id, user_id: userId });
         if (res && res.status === 1) {
           setAddressData(res.data);
+          if (res.data.shipping_state) {
+            let res1 = await get_city({
+              app_id: app_id,
+              state_id: res.data.shipping_state,
+            });
+            console.log("asd", res1.data);
+
+            if (res1 && res1.status === 1) {
+              setCityListShip(res1.data);
+            }
+          }
+          if (res.data.billing_state) {
+            let res1 = await get_city({
+              app_id: app_id,
+              state_id: res.data.billing_state,
+            });
+
+            if (res1 && res1.status === 1) {
+              setCityListBill(res1.data);
+              console.log("hkjsd", res1.data);
+            }
+          }
         }
       };
       getAddress();
@@ -251,10 +327,6 @@ const Billing = () => {
 
     let res = await updateAddress(addressData);
     if (res && res.status === 1) {
-      setLoading(false);
-      setType("success");
-      setMessage(res.message);
-      setOpen(true);
     } else {
       setLoading(false);
       setType("error");
@@ -305,33 +377,18 @@ const Billing = () => {
         <div className="row p-3 ">
           <div className="col-sm-8 m-1 bg-white mt-5 p-3 shadow-sm">
             <div class="accordion " id="accordionExample">
-              <div class="accordion-item border-0">
-                <h2 class="accordion-header" id="headingOne">
-                  <button
-                    class="accordion-button"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseOne"
-                    aria-expanded="true"
-                    aria-controls="collapseOne"
+              {ship ? (
+                <div class="accordion-item border-0">
+                  <h6
+                    className=""
+                    style={{
+                      fontFamily: "segoe ui symbol",
+                      fontWeight: "bolder",
+                    }}
                   >
-                    <h6
-                      className=""
-                      style={{
-                        fontFamily: "segoe ui symbol",
-                        fontWeight: "bolder",
-                      }}
-                    >
-                      Shipping Address
-                    </h6>
-                  </button>
-                </h2>
-                <div
-                  id="collapseOne"
-                  class="accordion-collapse collapse show"
-                  aria-labelledby="headingOne"
-                  data-bs-parent="#accordionExample"
-                >
+                    Shipping Address
+                  </h6>
+
                   <div class="accordion-body">
                     <form
                       action=""
@@ -395,6 +452,7 @@ const Billing = () => {
                             class="form-control p-3"
                             id="exampleInputEmail1"
                             placeholder="Enter Your City "
+                            value={addressData?.shipping_city}
                             aria-describedby="emailHelp"
                             style={{ borderRadius: "0px" }}
                             onChange={(e) => {
@@ -512,23 +570,22 @@ const Billing = () => {
                           borderRadius: "0px",
                           fontSize: "13px",
                         }}
+                        onClick={(e) => {
+                          setShip(false);
+                          setBill(true);
+                        }}
                       >
                         Save & Continue
                       </button>
                     </form>
                   </div>
                 </div>
-              </div>
-              <div class="accordion-item border-0">
-                <h2 class="accordion-header" id="headingTwo">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseTwo"
-                    aria-expanded="false"
-                    aria-controls="collapseTwo"
-                  >
+              ) : (
+                ""
+              )}
+              {bill ? (
+                <div class="accordion-item border-0">
+                  <h2 class="accordion-header" id="headingTwo">
                     <h6
                       className=""
                       style={{
@@ -538,14 +595,8 @@ const Billing = () => {
                     >
                       Billing Address
                     </h6>
-                  </button>
-                </h2>
-                <div
-                  id="collapseTwo"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="headingTwo"
-                  data-bs-parent="#accordionExample"
-                >
+                  </h2>
+
                   <div class="accordion-body">
                     <form
                       action=""
@@ -611,9 +662,7 @@ const Billing = () => {
                             placeholder="Enter Your City "
                             aria-describedby="emailHelp"
                             style={{ borderRadius: "0px" }}
-                            defaultValue={
-                              addressData ? addressData.billing_city : ""
-                            }
+                            value={addressData?.billing_city}
                             onChange={(e) => {
                               setAddressData({
                                 ...addressData,
@@ -729,23 +778,22 @@ const Billing = () => {
                           borderRadius: "0px",
                           fontSize: "13px",
                         }}
+                        onClick={(e) => {
+                          setPay(true);
+                          setBill(false);
+                        }}
                       >
                         Save & Continue
                       </button>
                     </form>
                   </div>
                 </div>
-              </div>
-              <div class="accordion-item border-0">
-                <h2 class="accordion-header" id="headingThree">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseThree"
-                    aria-expanded="false"
-                    aria-controls="collapseThree"
-                  >
+              ) : (
+                ""
+              )}
+              {pay ? (
+                <div class="accordion-item border-0">
+                  <h2 class="accordion-header" id="headingThree">
                     <h6
                       className=""
                       style={{
@@ -755,14 +803,8 @@ const Billing = () => {
                     >
                       Payment Method
                     </h6>
-                  </button>
-                </h2>
-                <div
-                  id="collapseThree"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="headingThree"
-                  data-bs-parent="#accordionExample"
-                >
+                  </h2>
+
                   <div class="accordion-body">
                     <ul
                       class="nav nav-pills mb-3"
@@ -842,7 +884,9 @@ const Billing = () => {
                     </div> */}
                   </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
 
@@ -855,311 +899,287 @@ const Billing = () => {
             >
               Product Summary{" "}
             </h5>
-            {url !== "new" ? (
-              <div className="row mt-5">
-                {/* <div className="col-sm-12 text-center">
+            {
+              url !== "new" ? (
+                <div className="row mt-5">
+                  {/* <div className="col-sm-12 text-center">
                                     <img src={product?.thumbnail_image} className="w-100" style={{ height: "150px" }} alt="" />
                                 </div> */}
-                <div className="col-sm-12">
-                  <h5
-                    className="text-muted mt-3 fw-bolder"
-                    style={{
-                      fontSize: "14px",
-                      textAlign: "justify",
-                      fontFamily: "segoe ui symbol",
-                    }}
-                  >
-                    {product?.name}
-                  </h5>
-                </div>
-                <div className="row mt-5">
-                  <div className="w-100 d-flex">
-                    <div className="w-50 text-center">
-                      <p
-                        className="text-muted fw-bolder"
-                        style={{
-                          fontSize: "14px",
-                          textAlign: "justify",
-                          fontFamily: "segoe ui symbol",
-                        }}
-                      >
-                        Quantity :
-                      </p>
-                    </div>
-                    <div
-                      className="w-50 "
+                  <div className="col-sm-12">
+                    <h5
+                      className="text-muted mt-3 fw-bolder"
                       style={{
                         fontSize: "14px",
-                        textAlign: "right",
+                        textAlign: "justify",
                         fontFamily: "segoe ui symbol",
                       }}
                     >
-                      {1}
-                    </div>
+                      {product?.name}
+                    </h5>
                   </div>
-                  <div className="w-100 d-flex">
-                    <div className="w-50 text-center">
-                      <p
-                        className="text-muted fw-bolder"
-                        style={{
-                          fontSize: "14px",
-                          textAlign: "justify",
-                          fontFamily: "segoe ui symbol",
-                        }}
-                      >
-                        Tax :
-                      </p>
-                    </div>
-                    <div
-                      className="w-50 "
-                      style={{
-                        fontSize: "14px",
-                        textAlign: "right",
-                        fontFamily: "segoe ui symbol",
-                      }}
-                    >
-                      {product?.tax}%
-                    </div>
-                  </div>
-                  <div className="w-100 d-flex">
-                    <div className="w-50 text-center">
-                      <p
-                        className="text-muted fw-bolder"
-                        style={{
-                          fontSize: "14px",
-                          textAlign: "justify",
-                          fontFamily: "segoe ui symbol",
-                        }}
-                      >
-                        Original price :
-                      </p>
-                    </div>
-                    <div
-                      className="w-50 "
-                      style={{
-                        fontSize: "14px",
-                        textAlign: "right",
-                        fontFamily: "segoe ui symbol",
-                      }}
-                    >
-                      {product?.mrp}
-                    </div>
-                  </div>
-                  <div className="w-100 d-flex">
-                    <div className="w-50 text-center">
-                      <p
-                        className="text-muted fw-bolder"
-                        style={{
-                          fontSize: "14px",
-                          textAlign: "justify",
-                          fontFamily: "segoe ui symbol",
-                        }}
-                      >
-                        Discount :
-                      </p>
-                    </div>
-                    <div
-                      className="w-50 "
-                      style={{
-                        fontSize: "14px",
-                        textAlign: "right",
-                        fontFamily: "segoe ui symbol",
-                      }}
-                    >
-                      {product?.discount}%
-                    </div>
-                  </div>
-                  <hr className="m-2 "></hr>
-                  <div className="w-100 d-flex">
-                    <div className="w-50 text-center">
-                      <h5
-                        className=" fw-bolder"
-                        style={{
-                          textAlign: "justify",
-                          fontFamily: "segoe ui symbol",
-                        }}
-                      >
-                        Total :
-                      </h5>
-                    </div>
-                    <div
-                      className="w-50  fw-bolder"
-                      style={{
-                        textAlign: "right",
-                        fontFamily: "segoe ui symbol",
-                      }}
-                    >
-                      ₹
-                      {parseFloat(product?.mrp) +
-                        ((100 - parseFloat(product?.discount)) / 100) *
-                          product?.tax}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              cartData?.cart.map((ele) => {
-                return (
                   <div className="row mt-5">
-                    <div className="col-sm-12 text-center">
-                      <img
-                        src={ele?.thumbnail_image}
-                        className="w-100"
-                        alt=""
-                      />
-                    </div>
-                    <div className="col-sm-12">
-                      <h5
-                        className="text-muted mt-3 fw-bolder"
+                    <div className="w-100 d-flex">
+                      <div className="w-50 text-center">
+                        <p
+                          className="text-muted fw-bolder"
+                          style={{
+                            fontSize: "14px",
+                            textAlign: "justify",
+                            fontFamily: "segoe ui symbol",
+                          }}
+                        >
+                          Quantity :
+                        </p>
+                      </div>
+                      <div
+                        className="w-50 "
                         style={{
                           fontSize: "14px",
-                          textAlign: "justify",
+                          textAlign: "right",
                           fontFamily: "segoe ui symbol",
                         }}
                       >
-                        {ele?.name}
-                      </h5>
+                        {1}
+                      </div>
                     </div>
-                    <div className="row mt-5">
-                      <div className="w-100 d-flex">
-                        <div className="w-50 text-center">
-                          <p
-                            className="text-muted fw-bolder"
-                            style={{
-                              fontSize: "14px",
-                              textAlign: "justify",
-                              fontFamily: "segoe ui symbol",
-                            }}
-                          >
-                            Quantity :
-                          </p>
-                        </div>
-                        <div
-                          className="w-50 "
+                    <div className="w-100 d-flex">
+                      <div className="w-50 text-center">
+                        <p
+                          className="text-muted fw-bolder"
                           style={{
                             fontSize: "14px",
-                            textAlign: "right",
+                            textAlign: "justify",
                             fontFamily: "segoe ui symbol",
                           }}
                         >
-                          {ele?.qty}
-                        </div>
+                          Tax :
+                        </p>
                       </div>
-                      <div className="w-100 d-flex">
-                        <div className="w-50 text-center">
-                          <p
-                            className="text-muted fw-bolder"
-                            style={{
-                              fontSize: "14px",
-                              textAlign: "justify",
-                              fontFamily: "segoe ui symbol",
-                            }}
-                          >
-                            Tax :
-                          </p>
-                        </div>
-                        <div
-                          className="w-50 "
+                      <div
+                        className="w-50 "
+                        style={{
+                          fontSize: "14px",
+                          textAlign: "right",
+                          fontFamily: "segoe ui symbol",
+                        }}
+                      >
+                        {product?.tax}%
+                      </div>
+                    </div>
+                    <div className="w-100 d-flex">
+                      <div className="w-50 text-center">
+                        <p
+                          className="text-muted fw-bolder"
                           style={{
                             fontSize: "14px",
-                            textAlign: "right",
+                            textAlign: "justify",
                             fontFamily: "segoe ui symbol",
                           }}
                         >
-                          {ele?.tax}%
-                        </div>
+                          Original price :
+                        </p>
                       </div>
-                      <div className="w-100 d-flex">
-                        <div className="w-50 text-center">
-                          <p
-                            className="text-muted fw-bolder"
-                            style={{
-                              fontSize: "14px",
-                              textAlign: "justify",
-                              fontFamily: "segoe ui symbol",
-                            }}
-                          >
-                            Original price :
-                          </p>
-                        </div>
-                        <div
-                          className="w-50 "
+                      <div
+                        className="w-50 "
+                        style={{
+                          fontSize: "14px",
+                          textAlign: "right",
+                          fontFamily: "segoe ui symbol",
+                        }}
+                      >
+                        {product?.mrp}
+                      </div>
+                    </div>
+                    <div className="w-100 d-flex">
+                      <div className="w-50 text-center">
+                        <p
+                          className="text-muted fw-bolder"
                           style={{
                             fontSize: "14px",
-                            textAlign: "right",
+                            textAlign: "justify",
                             fontFamily: "segoe ui symbol",
                           }}
                         >
-                          {ele?.mrp}
-                        </div>
+                          Discount :
+                        </p>
                       </div>
-                      <div className="w-100 d-flex">
-                        <div className="w-50 text-center">
-                          <p
-                            className="text-muted fw-bolder"
-                            style={{
-                              fontSize: "14px",
-                              textAlign: "justify",
-                              fontFamily: "segoe ui symbol",
-                            }}
-                          >
-                            Discount :
-                          </p>
-                        </div>
-                        <div
-                          className="w-50 "
-                          style={{
-                            fontSize: "14px",
-                            textAlign: "right",
-                            fontFamily: "segoe ui symbol",
-                          }}
-                        >
-                          {ele?.discount}%
-                        </div>
+                      <div
+                        className="w-50 "
+                        style={{
+                          fontSize: "14px",
+                          textAlign: "right",
+                          fontFamily: "segoe ui symbol",
+                        }}
+                      >
+                        {product?.discount}%
                       </div>
-                      <hr className="m-2 "></hr>
-                      <div className="w-100 d-flex">
-                        <div className="w-50 text-center">
-                          <h5
-                            className=" fw-bolder"
-                            style={{
-                              textAlign: "justify",
-                              fontFamily: "segoe ui symbol",
-                            }}
-                          >
-                            Total :
-                          </h5>
-                        </div>
-                        <div
-                          className="w-50  fw-bolder"
+                    </div>
+                    <hr className="m-2 "></hr>
+                    <div className="w-100 d-flex">
+                      <div className="w-50 text-center">
+                        <h5
+                          className=" fw-bolder"
                           style={{
-                            textAlign: "right",
+                            textAlign: "justify",
                             fontFamily: "segoe ui symbol",
                           }}
                         >
-                          ₹{" "}
-                          {(parseFloat(ele.mrp) *
-                            ele.qty *
-                            (100 - parseFloat(ele.discount)) *
-                            (100 + parseFloat(ele.tax))) /
-                            10000}
-                        </div>
+                          Total :
+                        </h5>
+                      </div>
+                      <div
+                        className="w-50  fw-bolder"
+                        style={{
+                          textAlign: "right",
+                          fontFamily: "segoe ui symbol",
+                        }}
+                      >
+                        ₹
+                        {parseFloat(product?.mrp) +
+                          ((100 - parseFloat(product?.discount)) / 100) *
+                            product?.tax}
                       </div>
                     </div>
                   </div>
-                );
-              })
+                </div>
+              ) : cartData?.cart && cartData?.cart.length > 0 ? (
+                <div className="table-responsive">
+                  <table className="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th> Name</th>
+
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cartData?.cart.map((element, index) => {
+                        return (
+                          <tr>
+                            <td>{index + 1}</td>
+                            <td>
+                              {element?.name} x {element?.qty}
+                            </td>
+
+                            <td>
+                              {(parseFloat(element.mrp) *
+                                element.qty *
+                                (100 - parseFloat(element.discount)) *
+                                (100 + parseFloat(element.tax))) /
+                                10000}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                    <br />
+                    <tr>
+                      <th>SubTotal</th>
+                      <td>{subtotal}</td>
+                    </tr>
+                    <tr>
+                      <th> Shipping</th>
+                      <td>{setting?.shipping_charges}</td>
+                    </tr>
+                    <tr>
+                      <th> Final Total</th>
+                      <td>
+                        {(subtotal + setting?.shipping_charges).toFixed(2)}
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              ) : (
+                "no data"
+              )
+              // cartData?.cart.map((ele) => {
+              //   return (
+              //     <div className="row mt-5">
+              //       <div className="col-sm-12">
+              //         <h5
+              //           className="text-muted mt-3 fw-bolder"
+              //           style={{
+              //             fontSize: "14px",
+              //             textAlign: "justify",
+              //             fontFamily: "segoe ui symbol",
+              //           }}
+              //         >
+              //           {ele?.name}
+              //         </h5>
+              //       </div>
+              //       <div className="row mt-5">
+              //         <div className="w-100 d-flex">
+              //           <div className="w-50 text-center">
+              //             <p
+              //               className="text-muted fw-bolder"
+              //               style={{
+              //                 fontSize: "14px",
+              //                 textAlign: "justify",
+              //                 fontFamily: "segoe ui symbol",
+              //               }}
+              //             >
+              //               Quantity :
+              //             </p>
+              //           </div>
+              //           <div
+              //             className="w-50 "
+              //             style={{
+              //               fontSize: "14px",
+              //               textAlign: "right",
+              //               fontFamily: "segoe ui symbol",
+              //             }}
+              //           >
+              //             {ele?.qty}
+              //           </div>
+              //         </div>
+
+              //         <hr className="m-2 "></hr>
+              //         <div className="w-100 d-flex">
+              //           <div className="w-50 text-center">
+              //             <h5
+              //               className=" fw-bolder"
+              //               style={{
+              //                 textAlign: "justify",
+              //                 fontFamily: "segoe ui symbol",
+              //               }}
+              //             >
+              //               Total :
+              //             </h5>
+              //           </div>
+              //           <div
+              //             className="w-50  fw-bolder"
+              //             style={{
+              //               textAlign: "right",
+              //               fontFamily: "segoe ui symbol",
+              //             }}
+              //           >
+              //             ₹{" "}
+              //             {(parseFloat(ele.mrp) *
+              //               ele.qty *
+              //               (100 - parseFloat(ele.discount)) *
+              //               (100 + parseFloat(ele.tax))) /
+              //               10000}
+              //           </div>
+              //         </div>
+              //       </div>
+              //     </div>
+              //   );
+              // })
+            }
+            {pay ? (
+              <Button
+                variant="contained"
+                className="p-3 px-5 m-2"
+                onClick={displayRazorpay}
+              >
+                {" "}
+                Pay Now
+              </Button>
+            ) : (
+              ""
             )}
           </div>
-
-          <Button
-            variant="contained"
-            className="p-3 px-5 m-2"
-            onClick={displayRazorpay}
-          >
-            {" "}
-            Pay Now
-          </Button>
         </div>
       </div>
       <Footer />

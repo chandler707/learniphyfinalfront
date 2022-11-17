@@ -14,18 +14,34 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         ...state,
         cart: inCart
           ? state.cart.map((item) => {
-            return item._id === action.payload._id
-              ? { ...item, qty: item.qty + 1 }
-              : {
-                ...item,
-              };
-          })
+              return item._id === action.payload._id
+                ? { ...item, qty: item.qty + 1 }
+                : {
+                    ...item,
+                  };
+            })
           : [...state.cart, { ...action.payload, qty: 1 }],
       };
 
-    case "REMOVE_CART":
-      console.log("yao")
-      return state.filter(({ id }) => id._id !== action.payload._id);
+    case actionType.EMPTY_CART:
+      return {
+        ...state,
+        cart: [],
+      };
+
+    case actionType.REMOVE_FROM_CART:
+      const itemData = state.cart.find((item) => {
+        if (item._id === action.payload) {
+          return item;
+        }
+      });
+
+      state.cart.splice(state.cart.indexOf(itemData), 1);
+
+      return {
+        ...state,
+        cart: state.cart,
+      };
     default:
       return { ...state };
   }
