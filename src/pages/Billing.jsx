@@ -24,7 +24,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { emptyCart } from "../Redux/shopping/shopping-action";
 import { useDispatch } from "react-redux";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -53,7 +53,7 @@ const Billing = () => {
   const [pay, setPay] = useState(false);
   const [setting, setSetting] = useState({});
   const [subtotal, setSubtotal] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState("cod");
+
   const dispatch = useDispatch();
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -220,41 +220,51 @@ const Billing = () => {
           });
         }
       }
-      let result = await placeOrder({
-        transaction_status: "success",
+      const place = async () => {
+        let result = await placeOrder({
+          transaction_status: "success",
 
-        transaction_type: "ecommerce",
-        payment_method: "cod",
+          transaction_type: "ecommerce",
+          payment_method: "cod",
 
-        app_id: app_id,
-        final_ammount: finalAmount + setting?.shipping_charges,
-        sub_total: subtotal,
-        shipping_charges: setting?.shipping_charges,
+          app_id: app_id,
+          final_ammount: finalAmount + setting?.shipping_charges,
+          sub_total: subtotal,
+          shipping_charges: setting?.shipping_charges,
 
-        user_id: userId,
-        order_data: { ...addressData },
-        order_items: cartData,
-      });
-      console.log("razorpay", result.message);
+          user_id: userId,
+          order_data: { ...addressData },
+          order_items: cartData,
+        });
+        if (result.status === 1) {
+          dispatch(emptyCart(""));
+          return { status: 1 };
+        } else {
+          return { status: 0 };
+        }
+      };
+      // console.log("razorpay", result.message);
 
-      alert(result.message);
-      if (result.status === 1) {
-        dispatch(emptyCart(""));
-      }
       // alert();
       swal({
         title: "Are you sure?",
         text: "We Confirm Your Order",
         icon: "warning",
+
         // buttons: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            swal(result.message, {
-              icon: "success",
-            });
-          }
-        });
+      }).then(async (willDelete) => {
+        let output = await place();
+        console.log("this is output", output);
+        if (output.status === 1) {
+          swal("order placed successfully", {
+            icon: "success",
+          });
+        } else {
+          swal("Error in placing order", {
+            icon: "danger",
+          });
+        }
+      });
     }
   }
 
@@ -376,7 +386,6 @@ const Billing = () => {
   };
 
   useEffect(() => {
-
     let token = localStorage.getItem("token");
     if (!token) {
       setIsLoggedIn(false);

@@ -42,10 +42,7 @@
   .nav-link:hover
   {
     background-color: #f1f1f1;
-<<<<<<< HEAD
-=======
     
->>>>>>> 3867ccd82e164be6a1b7f84253a3fd3658b8b894
 
   } 
   .nav-link
@@ -95,11 +92,6 @@
   /* border-bottom: 1px solid #FF723A; */
 }
 @media only screen and (max-width: 600px) {
-<<<<<<< HEAD
-   .login {
-     padding: 0px !important;
-  }
-=======
   .hamburger
   {
     visibility: visible !important;
@@ -109,7 +101,6 @@
     visibility: visible !important;
   }
 
->>>>>>> 3867ccd82e164be6a1b7f84253a3fd3658b8b894
  Slider
   {
     /* width: 100% !important; */
@@ -119,19 +110,13 @@
   .mobile-cart-link
   {
     display: block !important;
-<<<<<<< HEAD
-    margin-left: 160px !important;
-=======
     margin-left: 180px !important;
->>>>>>> 3867ccd82e164be6a1b7f84253a3fd3658b8b894
   }
   .desktop-cart-link
   {
     display: none !important;
   }
 }
-<<<<<<< HEAD
-=======
 .navbar-toggler
 {
   display: none !important;
@@ -141,7 +126,6 @@
   visibility: hidden;
 }
 
->>>>>>> 3867ccd82e164be6a1b7f84253a3fd3658b8b894
 
 
 

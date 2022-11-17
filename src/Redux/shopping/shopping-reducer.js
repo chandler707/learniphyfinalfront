@@ -42,6 +42,14 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         ...state,
         cart: state.cart,
       };
+    case actionType.INC_CART_ITEM:
+      const check = state.cart.find((item) =>
+        item._id === action.payload._id ? { ...item, qty: item.qty + 1 } : false
+      );
+      if (check) {
+        return { ...state, cart: [...state.cart, check] };
+      }
+
     default:
       return { ...state };
   }
