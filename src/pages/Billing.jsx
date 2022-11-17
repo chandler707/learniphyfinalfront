@@ -24,6 +24,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { emptyCart } from "../Redux/shopping/shopping-action";
 import { useDispatch } from "react-redux";
+import swal from 'sweetalert';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -54,6 +55,8 @@ const Billing = () => {
   const [subtotal, setSubtotal] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const dispatch = useDispatch();
+  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   function loadScript(src) {
     return new Promise((resolve) => {
@@ -238,6 +241,20 @@ const Billing = () => {
       if (result.status === 1) {
         dispatch(emptyCart(""));
       }
+      // alert();
+      swal({
+        title: "Are you sure?",
+        text: "We Confirm Your Order",
+        icon: "warning",
+        // buttons: true,
+      })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal(result.message, {
+              icon: "success",
+            });
+          }
+        });
     }
   }
 
@@ -357,6 +374,16 @@ const Billing = () => {
     setProduct(res.data);
     console.log("this is res", res);
   };
+
+  useEffect(() => {
+
+    let token = localStorage.getItem("token");
+    if (!token) {
+      setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   return (
     <>

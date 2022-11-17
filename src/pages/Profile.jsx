@@ -9,6 +9,7 @@ import {
   get_state,
   get_city,
   updateAddress,
+  get_order,
 } from "../Repository/UserRepository";
 import { app_id } from "../Repository/Repository";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +42,7 @@ const Profile = () => {
   const [message, setMessage] = useState("message");
   const [loading, setLoading] = useState(false);
   const [addressData, setAddressData] = useState({});
+  const [orderdetail, setorderDetail] = useState({});
   const navigate = useNavigate();
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -121,6 +123,12 @@ const Profile = () => {
     }
     console.log("rs", res);
   };
+  const orderDetail = async () => {
+    let res = await get_order({ page: 1, pagesize: 4, app_id: app_id, user_id: userId });
+    if (res && res.status === 1) {
+      setorderDetail(res.data);
+    }
+  };
   const submitData = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -158,21 +166,11 @@ const Profile = () => {
           </Alert>
         </Snackbar>
       </Stack>
-      <div className="container-fluid bg-light">
+      <div className="container-fluid ">
         <div className="row ">
-          <div className="col-sm-3 text-center mb-3 mt-5">
-            <img
-              src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/1bdc9a33850498.56ba69ac2ba5b.png"
-              height={130}
-              style={{ borderRadius: "50%" }}
-              alt=""
-            />
 
-            <p className="fw-bold">Sujal Goswami</p>
-            {/* <Button style={{ color: "#640513" }}>LogOut</Button> */}
-          </div>
-          <div className="col-sm-9 p-0 mt-5">
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <div className="col-sm-8  p-0 mt-5 ms-auto me-auto">
+            <ul class="nav nav-pills mb-3 ms-auto me-auto" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
                 <button
                   class="nav-link active "
@@ -215,6 +213,7 @@ const Profile = () => {
                   aria-controls="pills-contact"
                   aria-selected="false"
                   style={{ borderRadius: "0px" }}
+                  onClick={orderDetail}
                 >
                   Order Details
                 </button>
@@ -237,11 +236,11 @@ const Profile = () => {
                       fontWeight: "bolder",
                     }}
                   >
-                    Basics:
+                    Basic Detail :
                   </h5>
                   <form action="">
                     <div className="row">
-                      <div class="mb-3 col-sm-6">
+                      <div class="mb-3 col-sm-5">
                         <label
                           for="exampleInputEmail1"
                           style={{ fontSize: "13px" }}
@@ -251,7 +250,7 @@ const Profile = () => {
                         </label>
                         <input
                           type="text"
-                          class="form-control p-3"
+                          class="form-control p-2"
                           id="exampleInputEmail1"
                           defaultValue={userdata ? userdata.fname : ""}
                           onChange={(e) => setName(e.target.value)}
@@ -262,7 +261,7 @@ const Profile = () => {
                         />
                         {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
                       </div>
-                      <div class="mb-3 col-sm-6">
+                      <div class="mb-3 col-sm-5">
                         <label
                           for="exampleInputEmail1"
                           style={{ fontSize: "13px" }}
@@ -272,7 +271,7 @@ const Profile = () => {
                         </label>
                         <input
                           type="email"
-                          class="form-control p-3"
+                          class="form-control p-2"
                           id="exampleInputEmail1"
                           defaultValue={userdata ? userdata.email : ""}
                           placeholder="Enter Your Email "
@@ -283,7 +282,7 @@ const Profile = () => {
                         />
                         {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
                       </div>
-                      <div class="mb-3 col-sm-6">
+                      <div class="mb-3 col-sm-5">
                         <label
                           for="exampleInputEmail1"
                           style={{ fontSize: "13px" }}
@@ -293,7 +292,7 @@ const Profile = () => {
                         </label>
                         <input
                           type="number"
-                          class="form-control p-3"
+                          class="form-control p-2"
                           id="exampleInputEmail1"
                           value={userdata?.mobile}
                           placeholder="Enter Your Email "
@@ -374,7 +373,7 @@ const Profile = () => {
                               State
                             </label>
                             <select
-                              class="form-control p-3"
+                              class="form-control p-2"
                               id="exampleInputEmail1"
                               placeholder="Enter Your State "
                               aria-describedby="emailHelp"
@@ -396,15 +395,15 @@ const Profile = () => {
                               }}
                               required
                             >
-                              <option value="">---select state---</option>
+                              <option value="">select state</option>
                               {stateList.length > 0
                                 ? stateList.map((ele) => {
-                                    return (
-                                      <option value={ele._id}>
-                                        {ele.state_name}
-                                      </option>
-                                    );
-                                  })
+                                  return (
+                                    <option value={ele._id}>
+                                      {ele.state_name}
+                                    </option>
+                                  );
+                                })
                                 : ""}
                             </select>
                             {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -418,7 +417,7 @@ const Profile = () => {
                               City
                             </label>
                             <select
-                              class="form-control p-3"
+                              class="form-control p-2"
                               id="exampleInputEmail1"
                               placeholder="Enter Your City "
                               aria-describedby="emailHelp"
@@ -433,15 +432,15 @@ const Profile = () => {
                               }}
                               required
                             >
-                              <option value="">---select city---</option>
+                              <option value="">select city</option>
                               {cityListShip.length > 0
                                 ? cityListShip.map((ele) => {
-                                    return (
-                                      <option value={ele._id}>
-                                        {ele.city_name}
-                                      </option>
-                                    );
-                                  })
+                                  return (
+                                    <option value={ele._id}>
+                                      {ele.city_name}
+                                    </option>
+                                  );
+                                })
                                 : ""}
                             </select>
                             {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -461,7 +460,7 @@ const Profile = () => {
                               defaultValue={
                                 addressData ? addressData.shipping_pin_code : ""
                               }
-                              class="form-control p-3"
+                              class="form-control p-2"
                               id="exampleInputEmail1"
                               placeholder="Enter Your Pincode "
                               aria-describedby="emailHelp"
@@ -487,7 +486,7 @@ const Profile = () => {
                             </label>
                             <input
                               type="text"
-                              class="form-control p-3"
+                              class="form-control p-2"
                               id="exampleInputEmail1"
                               placeholder="Enter Your Locality/Landmark  "
                               aria-describedby="emailHelp"
@@ -524,7 +523,7 @@ const Profile = () => {
                               }
                               placeholder="Leave a comment here"
                               id="floatingTextarea2"
-                              style={{ height: "150px", borderRadius: "0px" }}
+                              style={{ height: "100px", borderRadius: "0px" }}
                               onChange={(e) => {
                                 setAddress(e.target.value);
                                 setAddressData({
@@ -536,7 +535,7 @@ const Profile = () => {
                           </div>
                         </div>
                         <button
-                          className="btn mt-4 p-3 text-light "
+                          className="btn mt-4 p-2 w-100 text-light "
                           type="submit"
                           style={{
                             backgroundColor: "#640513",
@@ -588,7 +587,7 @@ const Profile = () => {
                               State
                             </label>
                             <select
-                              class="form-control p-3"
+                              class="form-control p-2"
                               id="exampleInputEmail1"
                               placeholder="Enter Your State "
                               aria-describedby="emailHelp"
@@ -612,15 +611,15 @@ const Profile = () => {
                               }}
                               required
                             >
-                              <option value="">---select state---</option>
+                              <option value="">select state</option>
                               {stateList.length > 0
                                 ? stateList.map((ele) => {
-                                    return (
-                                      <option value={ele._id}>
-                                        {ele.state_name}
-                                      </option>
-                                    );
-                                  })
+                                  return (
+                                    <option value={ele._id}>
+                                      {ele.state_name}
+                                    </option>
+                                  );
+                                })
                                 : ""}
                             </select>
 
@@ -635,7 +634,7 @@ const Profile = () => {
                               City
                             </label>
                             <select
-                              class="form-control p-3"
+                              class="form-control p-2"
                               id="exampleInputEmail1"
                               placeholder="Enter Your City "
                               aria-describedby="emailHelp"
@@ -650,15 +649,15 @@ const Profile = () => {
                               }}
                               required
                             >
-                              <option value="">---select city---</option>
+                              <option value="">select city</option>
                               {cityListBill.length > 0
                                 ? cityListBill.map((ele) => {
-                                    return (
-                                      <option value={ele._id}>
-                                        {ele.city_name}
-                                      </option>
-                                    );
-                                  })
+                                  return (
+                                    <option value={ele._id}>
+                                      {ele.city_name}
+                                    </option>
+                                  );
+                                })
                                 : ""}
                             </select>
                             {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -675,7 +674,7 @@ const Profile = () => {
                             </label>
                             <input
                               type="text"
-                              class="form-control p-3"
+                              class="form-control p-2"
                               id="exampleInputEmail1"
                               placeholder="Enter Your Pincode "
                               aria-describedby="emailHelp"
@@ -704,7 +703,7 @@ const Profile = () => {
                             </label>
                             <input
                               type="text"
-                              class="form-control p-3"
+                              class="form-control p-2"
                               id="exampleInputEmail1"
                               placeholder="Enter Your Locality/Landmark  "
                               aria-describedby="emailHelp"
@@ -741,7 +740,7 @@ const Profile = () => {
                               defaultValue={
                                 addressData ? addressData.billing_address : ""
                               }
-                              style={{ height: "150px", borderRadius: "0px" }}
+                              style={{ height: "100px", borderRadius: "0px" }}
                               onChange={(e) => {
                                 setAddress(e.target.value);
                                 setAddressData({
@@ -753,7 +752,7 @@ const Profile = () => {
                           </div>
                         </div>
                         <button
-                          className="btn mt-4 p-3 text-light "
+                          className="btn mt-4 p-2 w-100 text-light "
                           type="submit"
                           style={{
                             backgroundColor: "#640513",
@@ -788,7 +787,7 @@ const Profile = () => {
                 tabindex="0"
               >
                 <div className="table-responsive ">
-                  <table class="table    table-hover">
+                  <table class="table table-hover">
                     <thead>
                       <tr>
                         <th scope="col">Order Id </th>

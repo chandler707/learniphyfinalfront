@@ -95,7 +95,10 @@ width: 100% !important;
   .booksheading Link{
     margin-top: 0px !important;
   }
-
+.live-classes
+{
+ margin: 0px !important;
+}
 
 }
 input::placeholder
@@ -105,4 +108,9 @@ input::placeholder
 .cart-checkout:disabled
 {
  cursor: not-allowed !important;
+}
+.search::placeholder
+{
+ font-weight: bold;
+ font-family: segoe ui symbol;
 }

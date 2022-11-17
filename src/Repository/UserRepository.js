@@ -208,6 +208,18 @@ export function veryfyPayment(payload) {
     } catch (error) {}
   });
 }
+export function get_order(payload) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await Repository.post(
+        `${baseUrl}/get_order`,
+        payload
+      );
+
+      return resolve(response.data);
+    } catch (error) {}
+  });
+}
 
 // export function userLogin(payload) {
 //   return new Promise(async (resolve, reject) => {

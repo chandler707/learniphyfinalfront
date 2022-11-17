@@ -16,7 +16,6 @@ const Books = () => {
     useEffect(() => {
 
         Get_product();
-
         setLoading(true)
         setTimeout(() => {
             setLoading(false)
@@ -116,14 +115,14 @@ const Books = () => {
                     </div>
                     <div className="col-sm-9">
                         <div className="row ">
-                            <div className="col-sm-3 mb-3">
+                            {/* <div className="col-sm-3 mb-3">
                                 <select class="form-select" aria-label="Default select example" style={{ borderRadius: "0px", border: "1px solid lightgrey" }}>
                                     <option value="">Default</option>
                                     <option value="1">Low To High</option>
                                     <option value="2">High To Low</option>
 
                                 </select>
-                            </div>
+                            </div> */}
                             {/* <div className="col-sm-9 text-right">
                                 <p className='fw-bold text-muted mt-2' style={{
                                     fontFamily: "segoe ui symbol", fontSize: "14px"

@@ -58,8 +58,8 @@ const Topsellingseries = () => {
                     <div className="row mt-5">
                         <Slider {...settings}>
                             <div className=''>
-                                <div className="col-sm-11 " >
-                                    <div className="card border-0 bg-light shadow-sm mb-3">
+                                <div className="col-sm-11  text-center" >
+                                    <div className="card live-classes border-0 bg-light shadow-sm mb-3">
                                         <Link to="/">
                                             <div className="image-section">
                                                 <img src="https://1.bp.blogspot.com/-Mt1yr_XSJTo/YM5G6xWut_I/AAAAAAAAcYk/q9thLPMyAx4vu5xBevIR_jPrfGNSkrWgACLcBGAsYHQ/s1280/WhatsApp%2BImage%2B2021-06-19%2Bat%2B00.19.02.webp" className='w-100' height={185} alt="" />
@@ -83,7 +83,7 @@ const Topsellingseries = () => {
                             </div>
                             <div>
                                 <div className="col-sm-11">
-                                    <div className="card border-0 bg-light shadow-sm  mb-3">
+                                    <div className="card live-classes border-0 bg-light shadow-sm  mb-3">
                                         <Link to="/">
                                             <div className="image-section">
                                                 <img src="https://assets.thehansindia.com/h-upload/2022/06/21/1298918-scr.jpg" height={185} className='w-100' alt="" />
@@ -109,7 +109,7 @@ const Topsellingseries = () => {
                             </div>
                             <div>
                                 <div className="col-sm-11">
-                                    <div className="card border-0 bg-light shadow-sm  mb-3">
+                                    <div className="card live-classes border-0 bg-light shadow-sm  mb-3">
                                         <Link to="/">
                                             <div className="image-section">
                                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAleZVWySyFQfMYIGcd9vcRnECNXznyE-jOw&usqp=CAU" height={185} className='w-100' alt="" />
@@ -135,7 +135,7 @@ const Topsellingseries = () => {
                             </div>
                             <div>
                                 <div className="col-sm-11">
-                                    <div className="card border-0  bg-light shadow-sm mb-3">
+                                    <div className="card live-classes border-0  bg-light shadow-sm mb-3">
                                         <Link to="/">
                                             <div className="image-section">
                                                 <img src="https://informativeinstitute.com/wp-content/uploads/2021/03/GDS-to-postman-syllabus-aaa.jpg" height={185} className='w-100' alt="" />
@@ -161,7 +161,7 @@ const Topsellingseries = () => {
                             </div>
                             <div>
                                 <div className="col-sm-11">
-                                    <div className="card border-0 bg-light shadow-sm mb-3">
+                                    <div className="card live-classes border-0 bg-light shadow-sm mb-3">
                                         <Link to="/">
                                             <div className="image-section">
                                                 <img src="https://qph.cf2.quoracdn.net/main-qimg-433ab15948bde6293ff1b425cc15e30d-pjlq" className='w-100' height={185} alt="" />
