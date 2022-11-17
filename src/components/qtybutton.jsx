@@ -5,7 +5,7 @@ import { removeFromCart } from "../Redux/shopping/shopping-action";
 import { useDispatch } from "react-redux";
 
 
-function Button() {
+function qtybutton() {
     const cartData = useSelector((state) => state.shopReducer);
 
     const [count, setCount] = useState(0);
@@ -24,8 +24,8 @@ function Button() {
                     </button>
                 </span>
             </div>
-            </>
+        </>
     )
 }
 
-export default Button
+export default qtybutton

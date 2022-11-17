@@ -53,7 +53,7 @@ const Billing = () => {
   const [pay, setPay] = useState(false);
   const [setting, setSetting] = useState({});
   const [subtotal, setSubtotal] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState("cod");
+
   const dispatch = useDispatch();
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [isLoggedIn, setIsLoggedIn] = useState(false);

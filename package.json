@@ -10,14 +10,12 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-<<<<<<< HEAD
-=======
     "aos": "^2.3.4",
->>>>>>> 3867ccd82e164be6a1b7f84253a3fd3658b8b894
     "axios": "^1.1.2",
     "bootstrap": "^5.2.2",
     "bootstrap-dropdown-hover": "^4.2.0",
     "firebase": "^8.2.3",
+    "mdb-ui-kit": "^6.0.0",
     "react": "^18.2.0",
     "react-burger-icons": "^1.1.8",
     "react-dom": "^18.2.0",
@@ -33,10 +31,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
     "slick-carousel": "^1.8.1",
-<<<<<<< HEAD
-=======
     "sweetalert": "^2.1.2",
->>>>>>> 3867ccd82e164be6a1b7f84253a3fd3658b8b894
     "web-vitals": "^2.1.4"
   },
   "scripts": {

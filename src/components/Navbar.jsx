@@ -16,16 +16,12 @@ import Button from '@mui/material/Button';
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Avatar from '@mui/material/Avatar';
+import qtybutton from "./qtybutton";
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [search, setSearch] = useState(``);
-  const [list, setList] = useState([
-    'Go to the store',
-    'Wash the dishes',
-    'Learn some code',
-  ]);
+  const [count, setCount] = useState(0);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -50,6 +46,7 @@ const Navbar = () => {
     navigate("/login");
   };
   useEffect(() => {
+
     let token = localStorage.getItem("token");
     // console.log(id)
     if (!token) {
@@ -63,6 +60,10 @@ const Navbar = () => {
     });
     AOS.refresh();
   }, []);
+
+
+
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-white shadow-sm  sticky-top" data-aos={"fade-down"}>
@@ -227,24 +228,23 @@ const Navbar = () => {
                   Contact us
                 </Link>
               </li>
-              <section className='section'>
+              <li className="ms-4 ">
                 <input
-                  type='text'
-                  className='input'
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder='Search...'
+                  type="search"
+                  className="form-control border-0 bg-light search "
+                  placeholder="Search for Books, Test series and more"
+                  style={{
+                    position: "relative",
+                    borderRadius: "0px",
+                    width: "500px",
+                  }}
                 />
-                <ul>
-                  {list
-                    .filter(li => li.toLowerCase().includes(search.toLowerCase()))
-                    .map((item, key) => (
-                      <li key={key}>
-                        {item}{' '}
-                        <span className='delete' onClick={() => handleDelete(item)} />
-                      </li>
-                    ))}
-                </ul>
-              </section>
+                <div class="list-group " style={{ borderRadius: "0px" }}>
+
+                  <button type="button" class="list-group-item list-group-item-action">A second button item</button>
+
+                </div>
+              </li>
             </ul>
             {isLoggedIn ? (
               <div className="d-flex">
@@ -385,6 +385,20 @@ const Navbar = () => {
                               {/* <Button /> */}
                               <h5 className="price fw-bold w-100 " style={{ marginTop: "-20px", fontFamily: "segoe ui symbol" }}>
                                 ₹ {itemTotal.toLocaleString()}
+
+                                <div class="input-group ms-auto">
+                                  <span className="input-group-btn  ">
+                                    <button type="button" class="quantity-left-minus btn text-dark btn-number " data-type="minus" style={{ borderRadius: "0px", border: "1px solid lightgrey" }} data-field="" onClick={(e) => setCount(count - 1)}>
+                                      <i className='fa fa-minus'></i>
+                                    </button>
+                                  </span>
+                                  <div className='py-1 px-4 ' style={{ border: "1px solid lightgrey" }}> {count}</div>
+                                  <span class="input-group-btn me-auto">
+                                    <button type="button" style={{ borderRadius: "0px", border: "1px solid lightgrey" }} className="quantity-right-plus btn  text-dark btn-number " data-type="plus" onClick={(e) => setCount(count + 1)} data-field="">
+                                      <i className='fa fa-plus'></i>
+                                    </button>
+                                  </span>
+                                </div>
                                 <button
                                   type="button"
                                   className=" cart-checkout btn mb-4 fw-bolder text-dark mt-3  " data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove Cart"
@@ -412,6 +426,7 @@ const Navbar = () => {
                             <span>&times;</span>
                           </Link> */}
                           </div>
+
                         </div>
                       );
                     })
@@ -672,5 +687,7 @@ const Navbar = () => {
     </>
   );
 };
+
+
 
 export default Navbar;
