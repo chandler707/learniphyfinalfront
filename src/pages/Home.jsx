@@ -6,16 +6,18 @@ import Slider from '../components/Slider'
 import Topsellingseries from '../components/Topsellingseries'
 import Toptestseries from '../components/Toptestseries'
 import Videocourse from '../components/Videocourse';
+
+import { useEffect } from "react";
 import "../components/navbar.css";
-import { CartProvider } from '../context/cartContext';
+import { CartProvider } from "../context/cartContext";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
 
 const Home = () => {
 
 
 
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -28,10 +30,8 @@ const Home = () => {
         <Videocourse />
         <Footer />
       </CartProvider>
-
     </>
+  );
+};
 
-  )
-}
-
-export default Home
+export default Home;

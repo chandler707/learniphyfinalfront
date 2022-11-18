@@ -20,3 +20,15 @@ export const removeFromCart = (info) => {
     payload: info,
   };
 };
+export const incrementCartItem = (item) => {
+  return {
+    type: actionType.INC_CART_ITEM,
+    payload: item,
+  };
+};
+export const decrementCartItem = (item) => {
+  return {
+    type: actionType.DEC_CART_ITEM,
+    payload: item,
+  };
+};

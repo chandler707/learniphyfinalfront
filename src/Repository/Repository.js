@@ -1,6 +1,8 @@
 import axios from "axios";
-// const baseDomain = "https://scholarshipbackend.herokuapp.com/api";
-const baseDomain = "https://learnipybackend.herokuapp.com/api";
+const baseDomain = "https://scholarshipbackend.herokuapp.com/api";
+// const baseDomain = "http://localhost:8000/api";
+// const pdfUrl = "http://localhost:8000/public/";
+const pdfUrl = "https://scholarshipbackend.herokuapp.com/public/";
 // const imageDomain = "http://localhost:4300";
 // const baseDomain = "http://d280-122-160-30-226.ngrok.io/api";
 const imageDomain = "https://learnipybackend.herokuapp.com";
@@ -13,6 +15,7 @@ export const customHeaders = {
 };
 export const baseUrl = `${baseDomain}`;
 export const imageUrl = `${imageDomain}`;
+export const pdf = `${pdfUrl}`;
 export default axios.create({
   baseUrl,
   headers: {

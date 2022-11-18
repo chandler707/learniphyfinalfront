@@ -7,19 +7,29 @@ import { get_product } from "../Repository/UserRepository";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
-import { removeFromCart } from "../Redux/shopping/shopping-action";
+import {
+  removeFromCart,
+  incrementCartItem,
+  decrementCartItem,
+} from "../Redux/shopping/shopping-action";
 import { useDispatch } from "react-redux";
 import MenuItem from "@mui/material/MenuItem";
-import profile from "../images/profile.gif"
+import profile from "../images/profile.gif";
 import Menu from "@mui/material/Menu";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Avatar from '@mui/material/Avatar';
+import Avatar from "@mui/material/Avatar";
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [search, setSearch] = useState(``);
+  const [list, setList] = useState([
+    'Go to the store',
+    'Wash the dishes',
+    'Learn some code',
+  ]);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -32,11 +42,10 @@ const Navbar = () => {
   const [product, setProduct] = useState({});
   const dispatch = useDispatch();
 
-
   const Remove_cart = (e, item) => {
     // e.preventDefault();
 
-    console.log(Remove_cart)
+    console.log(Remove_cart);
     dispatch(removeFromCart(item));
   };
   const logOut = () => {
@@ -70,7 +79,10 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-white shadow-sm  sticky-top" data-aos={"fade-down"}>
+      <nav
+        className="navbar navbar-expand-lg bg-white shadow-sm  sticky-top"
+        data-aos={"fade-down"}
+      >
         <div className="container-fluid px-4">
           <Link className="navbar-brand " to="/">
             {" "}
@@ -93,7 +105,15 @@ const Navbar = () => {
               </span>
             </Link>
           </div>
-          <button class="btn border-0 hamburger fs-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="fa-sharp fa-solid fa-bars-staggered"></i></button>
+          <button
+            class="btn border-0 hamburger fs-4"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasWithBothOptions"
+            aria-controls="offcanvasWithBothOptions"
+          >
+            <i class="fa-sharp fa-solid fa-bars-staggered"></i>
+          </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav  mb-lg-0  me-auto">
               <li className="nav-item">
@@ -101,7 +121,11 @@ const Navbar = () => {
                   className="nav-link  text-dark fw-bold"
                   aria-current="page"
                   to="/"
-                  style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
                 >
                   Home
                 </Link>
@@ -110,15 +134,24 @@ const Navbar = () => {
                 <Link
                   className="nav-link text-dark dropbtn fw-bold"
                   to="/"
-                  style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
                 >
                   Ldca Dop Exam
                 </Link>
                 <div class="dropdown-content">
                   <Link
-                    to="/notification"
+                    to={"/notification"}
+                    state={{ type: "notification" }}
                     className="fw-bold"
-                    style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
                   >
                     Notifications &nbsp;
                     <i
@@ -126,21 +159,48 @@ const Navbar = () => {
                       style={{ color: "#f1f1f1" }}
                     ></i>
                   </Link>
-                  <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                  <Link
+                    to={"/results"}
+                    state={{ type: "results" }}
+                    className="fw-bold"
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
+                  >
                     Result &nbsp;
                     <i
                       class="fa-solid fa-right-long"
                       style={{ color: "#f1f1f1" }}
                     ></i>
                   </Link>
-                  <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                  <Link
+                    to={"/answerkey"}
+                    state={{ type: "answerkey" }}
+                    className="fw-bold"
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
+                  >
                     Answer Key &nbsp;
                     <i
                       class="fa-solid fa-right-long"
                       style={{ color: "#f1f1f1" }}
                     ></i>
                   </Link>
-                  <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                  <Link
+                    to={"/calender"}
+                    state={{ type: "calender" }}
+                    className="fw-bold"
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
+                  >
                     Exam Calender &nbsp;
                     <i
                       class="fa-solid fa-right-long"
@@ -153,26 +213,57 @@ const Navbar = () => {
                 <Link
                   className="nav-link text-dark dropbtn fw-bold"
                   to="/"
-                  style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
                 >
                   Useful For Postel
                 </Link>
                 <div class="dropdown-content">
-                  <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                  <Link
+                    to={"/forms"}
+                    state={{ type: "forms" }}
+                    className="fw-bold"
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
+                  >
                     Forms &nbsp;
                     <i
                       class="fa-solid fa-right-long"
                       style={{ color: "#f1f1f1" }}
                     ></i>
                   </Link>
-                  <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                  <Link
+                    to={"/rules"}
+                    state={{ type: "rules" }}
+                    className="fw-bold"
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
+                  >
                     Important Rules &nbsp;
                     <i
                       class="fa-solid fa-right-long"
                       style={{ color: "#f1f1f1" }}
                     ></i>
                   </Link>
-                  <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                  <Link
+                    to={"/material"}
+                    state={{ type: "material" }}
+                    className="fw-bold"
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
+                  >
                     Study Material &nbsp;
                     <i
                       class="fa-solid fa-right-long"
@@ -185,26 +276,55 @@ const Navbar = () => {
                 <Link
                   className="nav-link text-dark dropbtn fw-bold"
                   to="/"
-                  style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
                 >
                   Amedments
                 </Link>
                 <div class="dropdown-content">
-                  <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                  <Link
+                    to="/"
+                    className="fw-bold"
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
+                  >
                     Latest Rules &nbsp;
                     <i
                       class="fa-solid fa-right-long"
                       style={{ color: "#f1f1f1" }}
                     ></i>
                   </Link>
-                  <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                  <Link
+                    to="/"
+                    className="fw-bold"
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
+                  >
                     Orders &nbsp;
                     <i
                       class="fa-solid fa-right-long"
                       style={{ color: "#f1f1f1" }}
                     ></i>
                   </Link>
-                  <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                  <Link
+                    to={"/circular"}
+                    state={{ type: "circular" }}
+                    className="fw-bold"
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      fontFamily: "segoe ui symbol",
+                    }}
+                  >
                     Circular &nbsp;
                     <i
                       class="fa-solid fa-right-long"
@@ -217,7 +337,11 @@ const Navbar = () => {
                 <Link
                   className="nav-link text-dark dropbtn fw-bold"
                   to="/feedback"
-                  style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
                 >
                   Feedback
                 </Link>
@@ -226,26 +350,34 @@ const Navbar = () => {
                 <Link
                   className="nav-link text-dark fw-bold"
                   to="/contact"
-                  style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
                 >
                   {" "}
                   Contact us
                 </Link>
               </li>
-              <li className="ms-4 ">
+              <section className='section'>
                 <input
-                  type="search"
-                  className="form-control border-0 bg-light search "
-                  placeholder="Search for Books, Test series and more"
-
-                  style={{
-                    position: "relative",
-                    borderRadius: "0px",
-                    width: "500px",
-                  }}
+                  type='text'
+                  className='input'
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder='Search...'
                 />
-
-              </li>
+                <ul>
+                  {list
+                    .filter(li => li.toLowerCase().includes(search.toLowerCase()))
+                    .map((item, key) => (
+                      <li key={key}>
+                        {item}{' '}
+                        <span className='delete' onClick={() => handleDelete(item)} />
+                      </li>
+                    ))}
+                </ul>
+              </section>
             </ul>
             {isLoggedIn ? (
               <div className="d-flex">
@@ -258,14 +390,16 @@ const Navbar = () => {
                     src={profile}
 
                   /> */}
-                  <Avatar alt="Remy Sharp" className="mb-0 mt-3  "
+                  <Avatar
+                    alt="Remy Sharp"
+                    className="mb-0 mt-3  "
                     height={38}
-
                     id="basic-button"
                     aria-controls={open ? "basic-menu" : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick} />
+                    onClick={handleClick}
+                  />
                 </Link>
                 <Menu
                   id="basic-menu"
@@ -278,7 +412,10 @@ const Navbar = () => {
                 >
                   <MenuItem>
                     {" "}
-                    <Link to="/profile" className="text-dark text-decoration-none">
+                    <Link
+                      to="/profile"
+                      className="text-dark text-decoration-none"
+                    >
                       {" "}
                       Profile{" "}
                     </Link>
@@ -361,15 +498,24 @@ const Navbar = () => {
                         src="https://img.freepik.com/free-vector/empty-concept-illustration_114360-1188.jpg?w=740&t=st=1667813839~exp=1667814439~hmac=8a3f9d62e3fc2ef2e5f2e80da6ddce45dcefeca970b25ee888c40855cece48ab"
                         height={200}
                       />
-                      <h6 className="fw-bold">{ }</h6>
+                      <h6 className="fw-bold">{}</h6>
                     </div>
                   ) : (
                     cartData?.cart?.map((item) => {
-                      const { id, thumbnail_image, name, price_without_tax, qty } = item;
+                      const {
+                        _id,
+                        thumbnail_image,
+                        name,
+                        price_without_tax,
+                        qty,
+                      } = item;
                       const itemTotal = price_without_tax * qty;
 
                       return (
-                        <div className="cart_items mt-5 shadow-sm p-3" key={id}>
+                        <div
+                          className="cart_items mt-5 shadow-sm p-3"
+                          key={_id}
+                        >
                           <figure className="cart_items_img mb-0 text-center ">
                             <img
                               src={thumbnail_image}
@@ -377,20 +523,49 @@ const Navbar = () => {
                               height={"150px"}
                               className="w-100"
                             />
-                            <p className=" text-center fw-bold mt-2 mb-0" style={{ textTransform: "capitalize" }}>{name}</p>
+                            <p
+                              className=" text-center fw-bold mt-2 mb-0"
+                              style={{ textTransform: "capitalize" }}
+                            >
+                              {name}
+                            </p>
+                            <button
+                              onClick={(e) => dispatch(incrementCartItem(item))}
+                            >
+                              +
+                            </button>
+                            <h4>{item.qty}</h4>
+                            <button
+                              disabled={item.qty <= 1}
+                              onClick={(e) => dispatch(decrementCartItem(item))}
+                            >
+                              -
+                            </button>
                             <p></p>
-
                           </figure>
                           <div className="cart_items_info ">
                             <div className=" foot mt-3 w-100">
                               {/* <Button /> */}
-                              <h5 className="price fw-bold w-100 " style={{ marginTop: "-20px", fontFamily: "segoe ui symbol" }}>
+                              <h5
+                                className="price fw-bold w-100 "
+                                style={{
+                                  marginTop: "-20px",
+                                  fontFamily: "segoe ui symbol",
+                                }}
+                              >
                                 ₹ {itemTotal.toLocaleString()}
                                 <button
                                   type="button"
-                                  className=" cart-checkout btn mb-4 fw-bolder text-dark mt-3  " data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove Cart"
-                                  onClick={(e) => Remove_cart(item.id)}
-                                  style={{ borderRadius: "0px", backgroundColor: "lightgrey", marginLeft: "255px" }}
+                                  className=" cart-checkout btn mb-4 fw-bolder text-dark mt-3  "
+                                  data-bs-toggle="tooltip"
+                                  data-bs-placement="top"
+                                  data-bs-title="Remove Cart"
+                                  onClick={(e) => Remove_cart(e, item.id)}
+                                  style={{
+                                    borderRadius: "0px",
+                                    backgroundColor: "lightgrey",
+                                    marginLeft: "255px",
+                                  }}
                                 >
                                   <i class="fa-solid fa-xmark"></i>
                                 </button>
@@ -428,8 +603,6 @@ const Navbar = () => {
                   >
                     Checkout
                   </button>
-
-
                 </Link>
               </div>
             </div>
@@ -437,15 +610,27 @@ const Navbar = () => {
         </div>
       </div>
 
-
-
-      <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+      <div
+        class="offcanvas offcanvas-start"
+        data-bs-scroll="true"
+        tabindex="-1"
+        id="offcanvasWithBothOptions"
+        aria-labelledby="offcanvasWithBothOptionsLabel"
+      >
         <div class="offcanvas-header bg-light">
-          <h6 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"><Link className="navbar-brand " to="/">
-            {" "}
-            <img src={logo} alt="" height={50} />{" "}
-          </Link>Dobwal Classes</h6>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          <h6 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+            <Link className="navbar-brand " to="/">
+              {" "}
+              <img src={logo} alt="" height={50} />{" "}
+            </Link>
+            Dobwal Classes
+          </h6>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="offcanvas-body">
           <ul className="navbar-nav text-center mt-3">
@@ -454,7 +639,11 @@ const Navbar = () => {
                 className="nav-link  text-dark fw-bold"
                 aria-current="page"
                 to="/"
-                style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                style={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  fontFamily: "segoe ui symbol",
+                }}
               >
                 Home
               </Link>
@@ -463,7 +652,11 @@ const Navbar = () => {
               <Link
                 className="nav-link text-dark dropbtn fw-bold"
                 to="/"
-                style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                style={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  fontFamily: "segoe ui symbol",
+                }}
               >
                 Ldca Dop Exam
               </Link>
@@ -471,7 +664,11 @@ const Navbar = () => {
                 <Link
                   to="/notification"
                   className="fw-bold"
-                  style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
                 >
                   Notifications &nbsp;
                   <i
@@ -479,21 +676,45 @@ const Navbar = () => {
                     style={{ color: "#f1f1f1" }}
                   ></i>
                 </Link>
-                <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                <Link
+                  to="/"
+                  className="fw-bold"
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
+                >
                   Result &nbsp;
                   <i
                     class="fa-solid fa-right-long"
                     style={{ color: "#f1f1f1" }}
                   ></i>
                 </Link>
-                <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                <Link
+                  to="/"
+                  className="fw-bold"
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
+                >
                   Answer Key &nbsp;
                   <i
                     class="fa-solid fa-right-long"
                     style={{ color: "#f1f1f1" }}
                   ></i>
                 </Link>
-                <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                <Link
+                  to="/"
+                  className="fw-bold"
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
+                >
                   Exam Calender &nbsp;
                   <i
                     class="fa-solid fa-right-long"
@@ -506,26 +727,54 @@ const Navbar = () => {
               <Link
                 className="nav-link text-dark dropbtn fw-bold"
                 to="/"
-                style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                style={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  fontFamily: "segoe ui symbol",
+                }}
               >
                 Useful For Postel
               </Link>
               <div class="dropdown-content">
-                <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                <Link
+                  to="/"
+                  className="fw-bold"
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
+                >
                   Forms &nbsp;
                   <i
                     class="fa-solid fa-right-long"
                     style={{ color: "#f1f1f1" }}
                   ></i>
                 </Link>
-                <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                <Link
+                  to="/"
+                  className="fw-bold"
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
+                >
                   Important Rules &nbsp;
                   <i
                     class="fa-solid fa-right-long"
                     style={{ color: "#f1f1f1" }}
                   ></i>
                 </Link>
-                <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                <Link
+                  to="/"
+                  className="fw-bold"
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
+                >
                   Study Material &nbsp;
                   <i
                     class="fa-solid fa-right-long"
@@ -538,26 +787,54 @@ const Navbar = () => {
               <Link
                 className="nav-link text-dark dropbtn fw-bold"
                 to="/"
-                style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                style={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  fontFamily: "segoe ui symbol",
+                }}
               >
                 Amedments
               </Link>
               <div class="dropdown-content">
-                <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                <Link
+                  to="/"
+                  className="fw-bold"
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
+                >
                   Latest Rules &nbsp;
                   <i
                     class="fa-solid fa-right-long"
                     style={{ color: "#f1f1f1" }}
                   ></i>
                 </Link>
-                <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                <Link
+                  to="/"
+                  className="fw-bold"
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
+                >
                   Orders &nbsp;
                   <i
                     class="fa-solid fa-right-long"
                     style={{ color: "#f1f1f1" }}
                   ></i>
                 </Link>
-                <Link to="/" className="fw-bold" style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}>
+                <Link
+                  to="/"
+                  className="fw-bold"
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    fontFamily: "segoe ui symbol",
+                  }}
+                >
                   Circular &nbsp;
                   <i
                     class="fa-solid fa-right-long"
@@ -570,7 +847,11 @@ const Navbar = () => {
               <Link
                 className="nav-link text-dark dropbtn fw-bold"
                 to="/feedback"
-                style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                style={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  fontFamily: "segoe ui symbol",
+                }}
               >
                 Feedback
               </Link>
@@ -579,7 +860,11 @@ const Navbar = () => {
               <Link
                 className="nav-link text-dark fw-bold"
                 to="/contact"
-                style={{ fontWeight: "500", fontSize: "14px", fontFamily: "segoe ui symbol" }}
+                style={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  fontFamily: "segoe ui symbol",
+                }}
               >
                 {" "}
                 Contact us
@@ -625,11 +910,13 @@ const Navbar = () => {
                 MenuListProps={{
                   "aria-labelledby": "basic-button",
                 }}
-
               >
                 <MenuItem>
                   {" "}
-                  <Link to="/profile" className="text-dark text-decoration-none">
+                  <Link
+                    to="/profile"
+                    className="text-dark text-decoration-none"
+                  >
                     {" "}
                     Profile{" "}
                   </Link>
@@ -656,14 +943,27 @@ const Navbar = () => {
               </div>
             </div>
           ) : (
-            <div className="text-center p-0 hstack   gap-3 text-center " style={{ marginTop: '150px' }}>
-              <Button variant="contained" className="w-50 p-2" style={{ backgroundColor: "#640513" }}>
-                <Link to="/login" className="text-decoration-none text-light  w-50">
+            <div
+              className="text-center p-0 hstack   gap-3 text-center "
+              style={{ marginTop: "150px" }}
+            >
+              <Button
+                variant="contained"
+                className="w-50 p-2"
+                style={{ backgroundColor: "#640513" }}
+              >
+                <Link
+                  to="/login"
+                  className="text-decoration-none text-light  w-50"
+                >
                   Login
                 </Link>
               </Button>
               <Button variant="contained" className="w-50 p-2 bg-dark">
-                <Link to="/signup" className="text-decoration-none text-light w-50">
+                <Link
+                  to="/signup"
+                  className="text-decoration-none text-light w-50"
+                >
                   Sign Up
                 </Link>
               </Button>
