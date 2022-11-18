@@ -7,7 +7,11 @@ import { get_product } from "../Repository/UserRepository";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
-import { removeFromCart } from "../Redux/shopping/shopping-action";
+import {
+  removeFromCart,
+  incrementCartItem,
+  decrementCartItem,
+} from "../Redux/shopping/shopping-action";
 import { useDispatch } from "react-redux";
 import MenuItem from "@mui/material/MenuItem";
 import profile from "../images/profile.gif";
@@ -129,7 +133,8 @@ const Navbar = () => {
                 </Link>
                 <div class="dropdown-content">
                   <Link
-                    to="/notification"
+                    to={"/notification"}
+                    state={{ type: "notification" }}
                     className="fw-bold"
                     style={{
                       fontWeight: "500",
@@ -144,7 +149,8 @@ const Navbar = () => {
                     ></i>
                   </Link>
                   <Link
-                    to="/"
+                    to={"/results"}
+                    state={{ type: "results" }}
                     className="fw-bold"
                     style={{
                       fontWeight: "500",
@@ -159,7 +165,8 @@ const Navbar = () => {
                     ></i>
                   </Link>
                   <Link
-                    to="/"
+                    to={"/answerkey"}
+                    state={{ type: "answerkey" }}
                     className="fw-bold"
                     style={{
                       fontWeight: "500",
@@ -174,7 +181,8 @@ const Navbar = () => {
                     ></i>
                   </Link>
                   <Link
-                    to="/"
+                    to={"/calender"}
+                    state={{ type: "calender" }}
                     className="fw-bold"
                     style={{
                       fontWeight: "500",
@@ -204,7 +212,8 @@ const Navbar = () => {
                 </Link>
                 <div class="dropdown-content">
                   <Link
-                    to="/"
+                    to={"/forms"}
+                    state={{ type: "forms" }}
                     className="fw-bold"
                     style={{
                       fontWeight: "500",
@@ -219,7 +228,8 @@ const Navbar = () => {
                     ></i>
                   </Link>
                   <Link
-                    to="/"
+                    to={"/rules"}
+                    state={{ type: "rules" }}
                     className="fw-bold"
                     style={{
                       fontWeight: "500",
@@ -234,7 +244,8 @@ const Navbar = () => {
                     ></i>
                   </Link>
                   <Link
-                    to="/"
+                    to={"/material"}
+                    state={{ type: "material" }}
                     className="fw-bold"
                     style={{
                       fontWeight: "500",
@@ -294,7 +305,8 @@ const Navbar = () => {
                     ></i>
                   </Link>
                   <Link
-                    to="/"
+                    to={"/circular"}
+                    state={{ type: "circular" }}
                     className="fw-bold"
                     style={{
                       fontWeight: "500",
@@ -485,7 +497,7 @@ const Navbar = () => {
                   ) : (
                     cartData?.cart?.map((item) => {
                       const {
-                        id,
+                        _id,
                         thumbnail_image,
                         name,
                         price_without_tax,
@@ -494,7 +506,10 @@ const Navbar = () => {
                       const itemTotal = price_without_tax * qty;
 
                       return (
-                        <div className="cart_items mt-5 shadow-sm p-3" key={id}>
+                        <div
+                          className="cart_items mt-5 shadow-sm p-3"
+                          key={_id}
+                        >
                           <figure className="cart_items_img mb-0 text-center ">
                             <img
                               src={thumbnail_image}
@@ -508,6 +523,18 @@ const Navbar = () => {
                             >
                               {name}
                             </p>
+                            <button
+                              onClick={(e) => dispatch(incrementCartItem(item))}
+                            >
+                              +
+                            </button>
+                            <h4>{item.qty}</h4>
+                            <button
+                              disabled={item.qty <= 1}
+                              onClick={(e) => dispatch(decrementCartItem(item))}
+                            >
+                              -
+                            </button>
                             <p></p>
                           </figure>
                           <div className="cart_items_info ">
