@@ -26,9 +26,9 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [search, setSearch] = useState(``);
   const [list, setList] = useState([
-    'Go to the store',
-    'Wash the dishes',
-    'Learn some code',
+    "Go to the store",
+    "Wash the dishes",
+    "Learn some code",
   ]);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -53,7 +53,6 @@ const Navbar = () => {
     navigate("/login");
   };
   useEffect(() => {
-
     let token = localStorage.getItem("token");
     // console.log(id)
     if (!token) {
@@ -68,13 +67,11 @@ const Navbar = () => {
     AOS.refresh();
   }, []);
 
-
-  const defaultOptions = []
+  const defaultOptions = [];
   for (let i = 0; i < 10; i++) {
     defaultOptions.push(`option ${i}`);
     defaultOptions.push(`suggestion ${i}`);
     defaultOptions.push(`advice ${i}`);
-
   }
 
   return (
@@ -360,20 +357,25 @@ const Navbar = () => {
                   Contact us
                 </Link>
               </li>
-              <section className='section'>
+              <section className="section">
                 <input
-                  type='text'
-                  className='input'
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder='Search...'
+                  type="text"
+                  className="input"
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search..."
                 />
                 <ul>
                   {list
-                    .filter(li => li.toLowerCase().includes(search.toLowerCase()))
+                    .filter((li) =>
+                      li.toLowerCase().includes(search.toLowerCase())
+                    )
                     .map((item, key) => (
                       <li key={key}>
-                        {item}{' '}
-                        <span className='delete' onClick={() => handleDelete(item)} />
+                        {item}{" "}
+                        <span
+                          className="delete"
+                          onClick={() => Remove_cart(item)}
+                        />
                       </li>
                     ))}
                 </ul>
@@ -588,7 +590,6 @@ const Navbar = () => {
                             <span>&times;</span>
                           </Link> */}
                           </div>
-
                         </div>
                       );
                     })
