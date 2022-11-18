@@ -1,11 +1,11 @@
 import axios from "axios";
-const baseDomain = "https://scholarshipbackend.herokuapp.com/api";
+const baseDomain = "http://ff10-122-160-30-226.ngrok.io/api";
 // const baseDomain = "http://localhost:8000/api";
 // const pdfUrl = "http://localhost:8000/public/";
-const pdfUrl = "https://scholarshipbackend.herokuapp.com/public/";
+const pdfUrl = "http://ff10-122-160-30-226.ngrok.io/public/";
 // const imageDomain = "http://localhost:4300";
 // const baseDomain = "http://d280-122-160-30-226.ngrok.io/api";
-const imageDomain = "https://learnipybackend.herokuapp.com";
+const imageDomain = "http://ff10-122-160-30-226.ngrok.io";
 const authorization_prefix = "Bearer ";
 
 export const app_id = "618e5e2f339a8e2b1055fffb";

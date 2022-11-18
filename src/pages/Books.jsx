@@ -6,12 +6,20 @@ import "../components/navbar.css";
 import { get_product } from '../Repository/UserRepository';
 import { app_id } from '../Repository/Repository';
 import HashLoader from "react-spinners/HashLoader";
+import ReactPaginate from "react-paginate";
+import { addToCart } from "../Redux/shopping/shopping-action";
+import { useSelector, useDispatch } from "react-redux";
 
 const Books = () => {
 
 
     const [product, setProduct] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [pageCount, setPageCount] = useState(1);
+    const [currentpage, setCurrentPage] = useState(1);
+    const [dataCount, setDataCount] = useState(0);
+    const dispatch = useDispatch();
+    let pagesize = 8;
 
     useEffect(() => {
 
@@ -22,13 +30,34 @@ const Books = () => {
 
         }, 3000)
 
-    }, []);
+    }, [currentpage]);
     const Get_product = async () => {
-        let res = await get_product({ app_id: app_id, page: 1, pagesize: 4, is_all: true });
+
+        let res = await get_product({ app_id: app_id, page: currentpage, pagesize: pagesize, is_all: true });
+
         setProduct(res.data);
+
+        setDataCount(res.count);
+        let pageCount1 = Math.ceil(res.count / pagesize);
+
+        setPageCount(pageCount1);
+    };
+
+    const onPageSubmit = (value) => {
+
+        setCurrentPage(value.selected + 1);
+
+        console.log("value", value.selected + 1);
     };
 
 
+    const handleAddToCart = (e, item) => {
+        // here, we cannot directly pass the `props` as it is, if we need to access the same value within the child component. So, we've to pass it as a different prop like this- `{...props}`
+        // console.log("this is item", item);
+        // addItem(item);
+        // setIsAdded(true);
+        dispatch(addToCart(item));
+    };
     return (
         <>
             <Navbar />
@@ -154,7 +183,7 @@ const Books = () => {
 
 
 
-                                                        <button className='btn w-100 mb-2 fw-bold text-light p-2 ' style={{ borderRadius: "0px", backgroundColor: "#640513" }}>Add To Cart</button>
+                                                        <button className='btn w-100 mb-2 fw-bold text-light p-2 ' style={{ borderRadius: "0px", backgroundColor: "#640513" }} onClick={(e) => handleAddToCart(e, product)}>Add To Cart</button>
 
                                                         <Link to={`/singleproduct/${ele._id}`} >
                                                             <button className='btn w-100 mt-1 mb-2 text-dark fw-bold p-2' style={{ borderRadius: "0px", border: "1px solid black" }}>Buy Now</button>
@@ -180,22 +209,26 @@ const Books = () => {
 
                                 {/* pagination */}
 
-                                <div className="row">
-                                    <div className="col-sm-6 ms-auto me-auto  mt-5" style={{ borderRadius: "10px" }}>
-                                        <nav aria-label="Page navigation example" className=' pt-2 border-0'>
-                                            <ul class="pagination justify-content-center" >
-                                                <li class="page-item ">
-                                                    <a class="page-link border-0 m-2 " style={{ color: "#640513" }}><i class="fa-solid fa-left-long"></i></a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link border-0 m-2 text-light" href="#" style={{ backgroundColor: "#640513", borderRadius: "100px" }}>1</a></li>
-                                                <li class="page-item"><a class="page-link border-0 m-2 text-dark" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link border-0 m-2 text-dark" href="#">3</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link border-0 m-2 " style={{ color: "#640513" }} href="#"><i class="fa-solid fa-right-long"></i></a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
+                                <div className='py-3' style={{ display: "flex", justifyContent: "space-evenly", marginTop: "50px", borderRadius: "20px" }}>
+                                    <ReactPaginate
+                                        breakLabel="..."
+                                        nextLabel={<i class="fa-solid fa-arrow-right"></i>}
+                                        onPageChange={onPageSubmit}
+                                        pageRangeDisplayed={8}
+                                        pageCount={pageCount ? pageCount : 1}
+                                        previousLabel={<i class="fa-solid fa-arrow-left"></i>}
+                                        pageClassName="page-item"
+                                        pageLinkClassName="page-link  shadow p-2 px-4 border-0 m-2"
+                                        previousClassName="page-item "
+                                        previousLinkClassName="page-link  text-dark shadow p-2 px-4 border-0 m-2 border-rounded-circle"
+                                        nextClassName="page-item "
+                                        nextLinkClassName="page-link   text-dark shadow p-2 px-4 border-0 m-2 "
+                                        breakClassName="page-item p-3"
+                                        breakLinkClassName="page-link"
+                                        containerClassName="pagination"
+                                        activeClassName="active"
+                                        renderOnZeroPageCount={null}
+                                    />
                                 </div>
 
 

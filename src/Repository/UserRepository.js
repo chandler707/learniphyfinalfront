@@ -220,6 +220,18 @@ export function get_order(payload) {
     } catch (error) {}
   });
 }
+export function addFeedback(payload) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await Repository.post(
+        `${baseUrl}/add_feedback`,
+        payload
+      );
+
+      return resolve(response.data);
+    } catch (error) {}
+  });
+}
 
 // export function userLogin(payload) {
 //   return new Promise(async (resolve, reject) => {

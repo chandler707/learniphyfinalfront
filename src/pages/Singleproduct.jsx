@@ -7,10 +7,12 @@ import { Link } from "react-router-dom";
 import { addToCart } from "../Redux/shopping/shopping-action";
 import { useSelector, useDispatch } from "react-redux";
 
+
 // import { Link } from 'react-router-dom';
 const Singleproduct = () => {
   const [product, setProduct] = useState({});
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     let id = window.location.pathname.split("/").pop();
@@ -25,9 +27,15 @@ const Singleproduct = () => {
     setProduct(res.data);
     console.log("this is res", res);
   };
+
   const handleAddToCart = (e, item) => {
+    // here, we cannot directly pass the `props` as it is, if we need to access the same value within the child component. So, we've to pass it as a different prop like this- `{...props}`
+    // console.log("this is item", item);
+    // addItem(item);
+    // setIsAdded(true);
     dispatch(addToCart(item));
   };
+
   return (
     <>
       <Navbar />
@@ -150,6 +158,7 @@ const Singleproduct = () => {
                 <button
                   className="btn w-100 mb-2 fw-bold text-light p-2"
                   style={{ borderRadius: "0px", backgroundColor: "#640513" }}
+                  onClick={(e) => handleAddToCart(e, product)}
                 >
                   Add To Cart
                 </button>
@@ -157,7 +166,7 @@ const Singleproduct = () => {
                   <button
                     className="btn w-100 mt-1 fw-bold p-2"
                     style={{ borderRadius: "0px", border: "1px solid black" }}
-                    onClick={(e) => handleAddToCart(e, product)}
+
                   >
                     Buy Now
                   </button>
