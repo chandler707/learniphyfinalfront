@@ -104,13 +104,13 @@ const Signup = () => {
                                 </div>
                                 <div class="mb-2">
                                     <label for="exampleInputEmail1" style={{ fontSize: "13px" }} class="form-label text-dark mb-0">Email Address</label>
-                                    <input type="email" class="form-control p-2" id="exampleInputEmail1" placeholder='Enter Your Email Address' aria-describedby="emailHelp" style={{ borderRadius: "0px"}} onChange={(e) => setEmail(e.target.value)} required />
+                                    <input type="email" class="form-control p-2" id="exampleInputEmail1" placeholder='Enter Your Email Address' aria-describedby="emailHelp" style={{ borderRadius: "0px" }} onChange={(e) => setEmail(e.target.value)} required />
                                     {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
                                 </div>
                                 <div className="row mb-2">
                                     <div className="col-sm-6">
                                         <label for="exampleInputPassword1" style={{ fontSize: "13px" }} class="form-label text-dark mb-0">State</label>
-                                        <select class="form-select p-2" aria-label="Default select example" style={{ borderRadius: "0px"}} onChange={onchangeState}>
+                                        <select class="form-select p-2" aria-label="Default select example" style={{ borderRadius: "0px" }} onChange={onchangeState} required>
                                             <option selected style={{ fontSize: "13px" }} >Select State</option>
                                             {stateList?.map((ele, index) => {
                                                 return (
@@ -123,7 +123,7 @@ const Signup = () => {
                                     </div>
                                     <div className="col-sm-6">
                                         <label for="exampleInputPassword1" style={{ fontSize: "13px" }} class="form-label text-dark mb-0">City</label>
-                                        <select class="form-select p-2" aria-label="Default select example" style={{ borderRadius: "0px" }} onChange={(e) => setCity(e.target.value)}>
+                                        <select class="form-select p-2" aria-label="Default select example" style={{ borderRadius: "0px" }} onChange={(e) => setCity(e.target.value)} required>
                                             <option selected style={{ fontSize: "13px" }} >Select City</option>
                                             {cityList?.map((ele, index) => {
                                                 return (
