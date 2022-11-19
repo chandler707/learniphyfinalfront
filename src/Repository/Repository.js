@@ -5,7 +5,7 @@ const baseDomain = "http://localhost:8000/api";
 const pdfUrl = "https://learnipybackend.herokuapp.com/public/";
 // const imageDomain = "http://localhost:4300";
 // const baseDomain = "http://d280-122-160-30-226.ngrok.io/api";
-const imageDomain = "https://learnipybackend.herokuapp.com";
+const imageDomain = "http://ff10-122-160-30-226.ngrok.io";
 const authorization_prefix = "Bearer ";
 
 export const app_id = "618e5e2f339a8e2b1055fffb";

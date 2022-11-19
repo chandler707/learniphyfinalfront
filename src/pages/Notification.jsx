@@ -32,32 +32,30 @@ const Notification = () => {
   return (
     <>
       <Navbar />
-      <br />
-      <br />
       <div className="container">
         <div className="row">
           {pdfList && pdfList.length > 0
             ? pdfList.map((pdf, index) => {
-                return (
-                  <Link>
-                    <div className="col-sm-3">
-                      <div className="card border-0 bg-light shadow-sm mb-3">
-                        <div className="content ms-2">
-                          <h6
-                            className="mt-2 mb-0 fw-bold"
-                            style={{
-                              fontFamily: "segoe ui symbol",
-                            }}
-                            onClick={(e) => opendoc(e, pdf.pdf_url)}
-                          >
-                            {pdf?.name}
-                          </h6>
-                        </div>
+              return (
+                <Link>
+                  <div className="col-sm-3">
+                    <div className="card border-0 bg-light shadow-sm mb-3">
+                      <div className="content ms-2">
+                        <h6
+                          className="mt-2 mb-0 fw-bold"
+                          style={{
+                            fontFamily: "segoe ui symbol",
+                          }}
+                          onClick={(e) => opendoc(e, pdf.pdf_url)}
+                        >
+                          {pdf?.name}
+                        </h6>
                       </div>
                     </div>
-                  </Link>
-                );
-              })
+                  </div>
+                </Link>
+              );
+            })
             : ""}
         </div>
       </div>

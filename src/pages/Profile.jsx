@@ -17,6 +17,8 @@ import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import app from "../firebase";
+import moment from "moment/moment";
+import { Link } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -42,7 +44,7 @@ const Profile = () => {
   const [message, setMessage] = useState("message");
   const [loading, setLoading] = useState(false);
   const [addressData, setAddressData] = useState({});
-  const [orderdetail, setorderDetail] = useState({});
+  const [orderdetail, setorderDetail] = useState([]);
   const navigate = useNavigate();
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -124,7 +126,12 @@ const Profile = () => {
     console.log("rs", res);
   };
   const orderDetail = async () => {
-    let res = await get_order({ page: 1, pagesize: 4, app_id: app_id, user_id: userId });
+    let res = await get_order({
+      page: 1,
+      pagesize: 100,
+      app_id: app_id,
+      user_id: userId,
+    });
     if (res && res.status === 1) {
       setorderDetail(res.data);
     }
@@ -168,9 +175,12 @@ const Profile = () => {
       </Stack>
       <div className="container-fluid ">
         <div className="row ">
-
           <div className="col-sm-8  p-0 mt-5 ms-auto me-auto">
-            <ul class="nav nav-pills mb-3 ms-auto me-auto" id="pills-tab" role="tablist">
+            <ul
+              class="nav nav-pills mb-3 ms-auto me-auto"
+              id="pills-tab"
+              role="tablist"
+            >
               <li class="nav-item" role="presentation">
                 <button
                   class="nav-link active "
@@ -398,12 +408,12 @@ const Profile = () => {
                               <option value="">select state</option>
                               {stateList.length > 0
                                 ? stateList.map((ele) => {
-                                  return (
-                                    <option value={ele._id}>
-                                      {ele.state_name}
-                                    </option>
-                                  );
-                                })
+                                    return (
+                                      <option value={ele._id}>
+                                        {ele.state_name}
+                                      </option>
+                                    );
+                                  })
                                 : ""}
                             </select>
                             {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -435,12 +445,12 @@ const Profile = () => {
                               <option value="">select city</option>
                               {cityListShip.length > 0
                                 ? cityListShip.map((ele) => {
-                                  return (
-                                    <option value={ele._id}>
-                                      {ele.city_name}
-                                    </option>
-                                  );
-                                })
+                                    return (
+                                      <option value={ele._id}>
+                                        {ele.city_name}
+                                      </option>
+                                    );
+                                  })
                                 : ""}
                             </select>
                             {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -614,12 +624,12 @@ const Profile = () => {
                               <option value="">select state</option>
                               {stateList.length > 0
                                 ? stateList.map((ele) => {
-                                  return (
-                                    <option value={ele._id}>
-                                      {ele.state_name}
-                                    </option>
-                                  );
-                                })
+                                    return (
+                                      <option value={ele._id}>
+                                        {ele.state_name}
+                                      </option>
+                                    );
+                                  })
                                 : ""}
                             </select>
 
@@ -652,12 +662,12 @@ const Profile = () => {
                               <option value="">select city</option>
                               {cityListBill.length > 0
                                 ? cityListBill.map((ele) => {
-                                  return (
-                                    <option value={ele._id}>
-                                      {ele.city_name}
-                                    </option>
-                                  );
-                                })
+                                    return (
+                                      <option value={ele._id}>
+                                        {ele.city_name}
+                                      </option>
+                                    );
+                                  })
                                 : ""}
                             </select>
                             {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -786,50 +796,65 @@ const Profile = () => {
                 aria-labelledby="pills-contact-tab"
                 tabindex="0"
               >
-                <div className="table-responsive ">
-                  <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">Order Id </th>
-                        <th scope="col">Order Date </th>
-                        <th scope="col">Product Image</th>
-                        <th scope="col">Product Name</th>
-                        <th scope="col">Product Price</th>
-                        <th scope="col">Order Status</th>
-                        <th scope="col">Payment Method</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Larry the Bird</td>
-                        <td>Larry the Bird</td>
-                        <td>@twitter</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                {orderdetail && orderdetail.length != 0 ? (
+                  <div className="table-responsive">
+                    <table className="table table-hover mb-0">
+                      <thead>
+                        <tr>
+                          <th>Index</th>
+                          <th>Order ID</th>
+                          <th>User Name</th>
+
+                          <th>Order Date</th>
+                          <th>Payment Method </th>
+                          <th>Total </th>
+                          <th>Order Status </th>
+
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {orderdetail.map((element, index) => {
+                          return (
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>{element._id}</td>
+                              <td>
+                                {element?.user_info?.fname +
+                                  " " +
+                                  element?.user_info?.lname}
+                              </td>
+
+                              <td>
+                                {moment(element?.createdAt).format(
+                                  "DD MMM YYYY  h:mm:ss a"
+                                )}
+                              </td>
+                              <td>
+                                {element?.transaction_info?.payment_method}
+                              </td>
+                              <td>{element?.total?.toFixed(2)}</td>
+                              <td>{element?.order_status}</td>
+                              <td>
+                                <Link to={`/order/edit/${element._id}`}>
+                                  <i className="fas fa-edit"></i>
+                                </Link>{" "}
+                              </td>
+
+                              <td>
+                                {/* <Link to={`/order/edit/${element._id}`}>
+                                  <i className="fas fa-edit"></i>
+                                </Link>{" "} */}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  "no data"
+                )}
               </div>
             </div>
           </div>

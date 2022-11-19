@@ -171,7 +171,7 @@ const Billing = () => {
             payment_method: "razorpay",
             payment_id: data.razorpayPaymentId,
             app_id: app_id,
-            final_ammount: finalAmount,
+            final_amount: finalAmount,
             sub_total: subtotal,
 
             user_id: userId,
@@ -228,7 +228,7 @@ const Billing = () => {
           payment_method: "cod",
 
           app_id: app_id,
-          final_ammount: finalAmount + setting?.shipping_charges,
+          final_amount: finalAmount + setting?.shipping_charges,
           sub_total: subtotal,
           shipping_charges: setting?.shipping_charges,
 

@@ -26,9 +26,11 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [search, setSearch] = useState(``);
   const [list, setList] = useState([
-    "Go to the store",
-    "Wash the dishes",
-    "Learn some code",
+    "Online Test Series",
+    "Online Books",
+    "Live Classes",
+    "Ldce Postman / Mg / Mts Commom Exam 2023",
+    "Online Recorded Course 2023",
   ]);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -357,14 +359,19 @@ const Navbar = () => {
                   Contact us
                 </Link>
               </li>
-              <section className="section">
+              <section className="dropdown">
                 <input
                   type="text"
-                  className="input"
+                  className="input form-control search-input dropdown-toggle ms-5"
+                  data-bs-toggle="dropdown"
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search..."
+                  placeholder="Search for Books, Test series and more"
+                  style={{ width: "500px", borderRadius: "0px" }}
                 />
-                <ul>
+                <ul
+                  className=" dropdown-menu  ms-5 "
+                  style={{ width: "500px", borderRadius: "0px" }}
+                >
                   {list
                     .filter((li) =>
                       li.toLowerCase().includes(search.toLowerCase())
@@ -531,18 +538,34 @@ const Navbar = () => {
                             >
                               {name}
                             </p>
-                            <button
-                              onClick={(e) => dispatch(incrementCartItem(item))}
+                            <div
+                              className="d-flex"
+                              style={{ marginLeft: "150px" }}
                             >
-                              +
-                            </button>
-                            <h4>{item.qty}</h4>
-                            <button
-                              disabled={item.qty <= 1}
-                              onClick={(e) => dispatch(decrementCartItem(item))}
-                            >
-                              -
-                            </button>
+                              <button
+                                onClick={(e) =>
+                                  dispatch(incrementCartItem(item))
+                                }
+                                className="btn border-0 fs-4"
+                              >
+                                +
+                              </button>
+                              <h6
+                                className="mt-3"
+                                style={{ justifyContent: "space-evenly" }}
+                              >
+                                {item.qty}
+                              </h6>
+                              <button
+                                disabled={item.qty <= 1}
+                                onClick={(e) =>
+                                  dispatch(decrementCartItem(item))
+                                }
+                                className="btn border-0 fs-4"
+                              >
+                                -
+                              </button>
+                            </div>
                             <p></p>
                           </figure>
                           <div className="cart_items_info ">
@@ -558,14 +581,12 @@ const Navbar = () => {
                                 ₹ {itemTotal.toLocaleString()}
                                 <button
                                   type="button"
-                                  className=" cart-checkout btn mb-4 fw-bolder text-dark mt-3  "
+                                  className=" cart-checkout btn mb-4 fw-bolder text-dark  "
                                   data-bs-toggle="tooltip"
                                   data-bs-placement="top"
                                   data-bs-title="Remove Cart"
                                   onClick={(e) => Remove_cart(e, item.id)}
                                   style={{
-                                    borderRadius: "0px",
-                                    backgroundColor: "lightgrey",
                                     marginLeft: "255px",
                                   }}
                                 >
@@ -610,7 +631,6 @@ const Navbar = () => {
           }
         </div>
       </div>
-
       <div
         class="offcanvas offcanvas-start"
         data-bs-scroll="true"
