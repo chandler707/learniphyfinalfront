@@ -74,42 +74,31 @@ const Toptestseries = () => {
                         fontFamily: "segoe ui symbol"
                     }}>Online Test Series</h4>
                     <div className="row mt-5">
-        
-                            {catList && catList.length > 0 ?
-                                catList.map((ele, index) => {
-                                    return <div className='col-sm-12'>
-                                        <div className="col-sm-3" >
-                                            <div className="card border-0 bg-light shadow-sm  mb-3">
-                                                <Link to="/">
-                                                    <div className="image-section">
-                                                        <img src={ele?.image} className='w-100' height={185} alt="" />
-                                                    </div>
-                                                </Link>
-                                                <div className="content ms-2">
-                                                    <h6 className='mt-2 mb-0 fw-bold' style={{
-                                                        fontFamily: "segoe ui symbol"
-                                                    }}>{ele?.name}</h6>
-                                                    {/* <p className='m-0 text-muted' style={{
-                                                fontSize: "13px"
-                                            }}>Avinash Jain, The Codex</p>
-                                            <h6 className='mt-2'>₹449 <span className='text-muted'> <del>₹3,399</del> </span></h6> */}
-                                                    <a href="https://play.google.com/store/games">
-                                                        <button className='btn btn text-dark w-100 mb-2 mt-2 p-2 mt-3 fw-bold' style={{ borderRadius: "0px", border: "1px solid black", fontSize: "13px" }}><i class="fa-solid fa-eye"></i>  &nbsp;View More</button>
-                                                    </a>
 
+                        {catList && catList.length > 0 ?
+                            catList.map((ele, index) => {
+                                return <div className='col-sm-3' key={index}>
+                                    <div className="col-sm-12" >
+                                        <div className="card border-0 bg-light shadow-sm  mb-3">
+                                            <a href="https://play.google.com/store/games">
+                                                <div className="image-section">
+                                                    <img src={ele?.image} className='w-100' height={185} alt="" />
                                                 </div>
+                                            </a>
+                                            <div className="content ms-2">
+                                                <h6 className='mt-2 mb-0 fw-bold' style={{
+                                                    fontFamily: "segoe ui symbol"
+                                                }}>{ele?.name}</h6>
+                                                <a href="https://play.google.com/store/games">
+                                                    <button className='btn btn text-dark w-100 mb-2 mt-2 p-2 mt-3 fw-bold' style={{ borderRadius: "0px", border: "1px solid black", fontSize: "13px" }}><i class="fa-solid fa-eye"></i>  &nbsp;View More</button>
+                                                </a>
+
                                             </div>
                                         </div>
                                     </div>
-                                }) : ""
-                            }
-
-                  
-
-
-
-
-
+                                </div>
+                            }) : ""
+                        }
                     </div>
                 </div>
             </div>

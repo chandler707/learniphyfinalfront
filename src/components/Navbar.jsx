@@ -538,19 +538,20 @@ const Navbar = () => {
                             </p>
                             <div className="d-flex" style={{ marginLeft: "150px" }}>
                               <button
-                                onClick={(e) => dispatch(incrementCartItem(item))}
-                                className="btn border-0 fs-4"
-                              >
-                                +
-                              </button>
-                              <h6 className="mt-3" style={{ justifyContent: "space-evenly" }}>{item.qty}</h6>
-                              <button
                                 disabled={item.qty <= 1}
                                 onClick={(e) => dispatch(decrementCartItem(item))}
                                 className="btn border-0 fs-4"
                               >
                                 -
                               </button>
+                              <h6 className="mt-3" style={{ justifyContent: "space-evenly" }}>{item.qty}</h6>
+                              <button
+                                onClick={(e) => dispatch(incrementCartItem(item))}
+                                className="btn border-0 fs-4"
+                              >
+                                +
+                              </button>
+
                             </div>
                             <p></p>
                           </figure>

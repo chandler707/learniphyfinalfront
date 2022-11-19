@@ -31,6 +31,7 @@ import Rules from "./pages/Rules";
 import Material from "./pages/Material";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import Shipping from "./pages/Shipping";
+import OrderDetails from "./pages/OrderDetails";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
           <Route path="/material" element={<Material />} />
           <Route path="/circular" element={<Circular />} />
           <Route path="/Shipping" element={<Shipping />} />
+          <Route path="/orderdetails" element={<OrderDetails/>}/>
         </Routes>
       </Router>
     </>

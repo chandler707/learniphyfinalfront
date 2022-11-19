@@ -90,11 +90,6 @@ const Singleproduct = () => {
             >
               {product?.name}
             </p>
-            <p class="card-text" style={{ color: "" }}>
-              <small class="text-muted" style={{ color: "" }}>
-                Updated at: {product?.createdAt}
-              </small>
-            </p>
           </div>
           <div className="col-sm-6 ">
             <div
@@ -127,9 +122,6 @@ const Singleproduct = () => {
                   ₹<del>{product?.mrp}</del>
                 </span>
                 <br></br>
-                {/* <p  style={{
-                  fontFamily: "segoe ui symbol", fontWeight: "bolder"
-                }}>{product?.discount}%off</p> */}
                 <p
                   className="mt-3 mb-2 text-muted"
                   style={{
@@ -138,8 +130,13 @@ const Singleproduct = () => {
                     fontSize: "14px",
                   }}
                 >
-                  <i class="fa-solid fa-arrow-trend-up"></i> In Stock :{" "}
-                  {product?.stock}
+                  In Stock :{" "}
+
+                  {
+                    product?.stock > 0
+                      ? <small>{product?.stock}</small>
+                      : <small className="text-danger">Out Of Stock</small>
+                  }
                 </p>
                 <p
                   className="mb-2 text-success"
@@ -155,22 +152,45 @@ const Singleproduct = () => {
                 {/* <p className='text-muted' style={{
                   fontFamily: "segoe ui symbol", fontWeight: "bold", fontSize: "14px"
                 }}><i class="fa fa-money-bills"></i> Price Without Tax {product?.price_without_tax}</p> */}
-                <button
-                  className="btn w-100 mb-2 fw-bold text-light p-2"
-                  style={{ borderRadius: "0px", backgroundColor: "#640513" }}
-                  onClick={(e) => handleAddToCart(e, product)}
-                >
-                  Add To Cart
-                </button>
-                <Link to={`/billing/new`}>
-                  <button
-                    className="btn w-100 mt-1 fw-bold p-2"
-                    style={{ borderRadius: "0px", border: "1px solid black" }}
 
-                  >
-                    Buy Now
-                  </button>
-                </Link>
+
+
+                {
+                  product?.stock > 0
+                    ? <> <button
+                      className="btn w-100 mb-2 fw-bold text-light p-2"
+                      style={{ borderRadius: "0px", backgroundColor: "#640513" }}
+                      onClick={(e) => handleAddToCart(e, product)}
+                    >
+                      Add To Cart
+                    </button>
+
+                      <Link to={`/billing/new`}>
+                        <button
+                          className="btn w-100 mt-1 fw-bold p-2"
+                          style={{ borderRadius: "0px", border: "1px solid black" }}
+                        >
+                          Buy Now
+                        </button>
+                      </Link>
+                    </>
+                    : <><button
+                      className="btn w-100 mb-2 fw-bold text-light p-2"
+                      style={{ borderRadius: "0px", backgroundColor: "#640513" }}
+                      onClick={(e) => handleAddToCart(e, product)}
+                      disabled>
+                      Add To Cart
+                    </button>
+                      
+                        <button
+                          className="btn w-100 mt-1 fw-bold p-2"
+                          style={{ borderRadius: "0px", border: "1px solid black" }}
+                          disabled>
+                          Buy Now
+                        </button>
+                      </>
+                }
+
               </div>
             </div>
           </div>

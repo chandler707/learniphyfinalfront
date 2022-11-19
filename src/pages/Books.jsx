@@ -164,7 +164,7 @@ const Books = () => {
                                         return (
                                             <div key={index} className="col-sm-3">
                                                 <div className="card border-0 shadow mb-3">
-                                                    <Link to="">
+                                                    <Link to={`/singleproduct/${ele._id}`}>
                                                         <div className="image-section">
                                                             <img src={ele?.image[0]} className='w-100' height={200} alt="" />
                                                         </div>
