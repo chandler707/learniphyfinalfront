@@ -31,10 +31,13 @@ const shopReducer = (state = INITIAL_STATE, action) => {
 
     case actionType.REMOVE_FROM_CART:
       const itemData = state.cart.find((item) => {
+        console.log("thosn is id", action.payload);
         if (item._id === action.payload) {
+          console.log(item);
           return item;
         }
       });
+      console.log("this is item", itemData);
 
       state.cart.splice(state.cart.indexOf(itemData), 1);
 

@@ -381,7 +381,7 @@ const Navbar = () => {
                         {item}{" "}
                         <span
                           className="delete"
-                          onClick={() => Remove_cart(item)}
+                          onClick={() => Remove_cart(item._id)}
                         />
                       </li>
                     ))}
@@ -599,7 +599,7 @@ const Navbar = () => {
                                   data-bs-toggle="tooltip"
                                   data-bs-placement="top"
                                   data-bs-title="Remove Cart"
-                                  onClick={(e) => Remove_cart(e, item.id)}
+                                  onClick={(e) => Remove_cart(e, item._id)}
                                   style={{
                                     marginLeft: "255px",
                                   }}

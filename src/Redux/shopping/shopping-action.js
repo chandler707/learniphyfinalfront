@@ -15,6 +15,8 @@ export const emptyCart = (itemId) => {
   };
 };
 export const removeFromCart = (info) => {
+  console.log("thisnis adction", info);
+
   return {
     type: actionType.REMOVE_FROM_CART,
     payload: info,

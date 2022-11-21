@@ -25,6 +25,7 @@ import MuiAlert from "@mui/material/Alert";
 import { emptyCart } from "../Redux/shopping/shopping-action";
 import { useDispatch } from "react-redux";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -55,8 +56,9 @@ const Billing = () => {
   const [subtotal, setSubtotal] = useState(0);
 
   const dispatch = useDispatch();
-  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   function loadScript(src) {
     return new Promise((resolve) => {
@@ -105,7 +107,7 @@ const Billing = () => {
       // creating a new order
       const result = await razorPaypayment({
         app_id: app_id,
-        final_amount: 200,
+        final_amount: (subtotal + setting?.shipping_charges).toFixed(2),
         order_data: { ...addressData },
         order_items: cartData,
       });
@@ -156,10 +158,10 @@ const Billing = () => {
                 finalAmount =
                   finalAmount +
                   ele.qty *
-                  ((parseFloat(ele?.mrp) *
-                    ((100 - parseFloat(ele?.discount)) / 100) *
-                    (100 + ele?.tax)) /
-                    100);
+                    ((parseFloat(ele?.mrp) *
+                      ((100 - parseFloat(ele?.discount)) / 100) *
+                      (100 + ele?.tax)) /
+                      100);
               });
             }
           }
@@ -171,7 +173,8 @@ const Billing = () => {
             payment_method: "razorpay",
             payment_id: data.razorpayPaymentId,
             app_id: app_id,
-            final_amount: finalAmount,
+            final_amount: finalAmount + setting?.shipping_charges,
+            shipping_charges: setting?.shipping_charges,
             sub_total: subtotal,
 
             user_id: userId,
@@ -183,6 +186,7 @@ const Billing = () => {
           alert(result.message);
           if (result.status === 1) {
             dispatch(emptyCart(""));
+            navigate("/profile");
           }
         },
         prefill: {
@@ -213,10 +217,10 @@ const Billing = () => {
             finalAmount =
               finalAmount +
               ele.qty *
-              ((parseFloat(ele?.mrp) *
-                ((100 - parseFloat(ele?.discount)) / 100) *
-                (100 + ele?.tax)) /
-                100);
+                ((parseFloat(ele?.mrp) *
+                  ((100 - parseFloat(ele?.discount)) / 100) *
+                  (100 + ele?.tax)) /
+                  100);
           });
         }
       }
@@ -259,6 +263,7 @@ const Billing = () => {
           swal("order placed successfully", {
             icon: "success",
           });
+          navigate("/profile");
         } else {
           swal("Error in placing order", {
             icon: "danger",
@@ -287,7 +292,7 @@ const Billing = () => {
     window.scrollTo(0, 0);
     states();
   }, []);
-  const submitCheckout = async () => { };
+  const submitCheckout = async () => {};
   useEffect(() => {
     setShip(true);
 
@@ -303,7 +308,7 @@ const Billing = () => {
                 element.qty *
                 (100 - parseFloat(element.discount)) *
                 (100 + parseFloat(element.tax))) /
-              10000;
+                10000;
           });
           setSubtotal(sub);
         }
@@ -347,9 +352,10 @@ const Billing = () => {
       };
       getAddress();
     }
-  }, []);
+  }, [cartData]);
 
   const submitDataAddress = async (e) => {
+    console.log("tha");
     e.preventDefault();
 
     let res = await updateAddress(addressData);
@@ -428,7 +434,11 @@ const Billing = () => {
                   <div class="accordion-body">
                     <form
                       action=""
-                      onSubmit={submitDataAddress}
+                      onSubmit={(e) => {
+                        submitDataAddress(e);
+                        setShip(false);
+                        setBill(true);
+                      }}
                       className="mt-5"
                     >
                       <div className="row">
@@ -466,12 +476,12 @@ const Billing = () => {
                             <option value="">---select state---</option>
                             {stateList.length > 0
                               ? stateList.map((ele) => {
-                                return (
-                                  <option value={ele._id}>
-                                    {ele.state_name}
-                                  </option>
-                                );
-                              })
+                                  return (
+                                    <option value={ele._id}>
+                                      {ele.state_name}
+                                    </option>
+                                  );
+                                })
                               : ""}
                           </select>
                           {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -502,12 +512,12 @@ const Billing = () => {
                             <option value="">---select city---</option>
                             {cityListShip.length > 0
                               ? cityListShip.map((ele) => {
-                                return (
-                                  <option value={ele._id}>
-                                    {ele.city_name}
-                                  </option>
-                                );
-                              })
+                                  return (
+                                    <option value={ele._id}>
+                                      {ele.city_name}
+                                    </option>
+                                  );
+                                })
                               : ""}
                           </select>
                           {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -595,6 +605,7 @@ const Billing = () => {
                                 shipping_address: e.target.value,
                               });
                             }}
+                            required
                           ></textarea>
                         </div>
                       </div>
@@ -606,10 +617,9 @@ const Billing = () => {
                           borderRadius: "0px",
                           fontSize: "13px",
                         }}
-                        onClick={(e) => {
-                          setShip(false);
-                          setBill(true);
-                        }}
+                        // onClick={(e) => {
+
+                        // }}
                       >
                         Save & Continue
                       </button>
@@ -636,7 +646,11 @@ const Billing = () => {
                   <div class="accordion-body">
                     <form
                       action=""
-                      onSubmit={submitDataAddress}
+                      onSubmit={(e) => {
+                        submitDataAddress(e);
+                        setPay(true);
+                        setBill(false);
+                      }}
                       className=""
                     >
                       <div className="row">
@@ -673,12 +687,12 @@ const Billing = () => {
                             <option value="">---select state---</option>
                             {stateList.length > 0
                               ? stateList.map((ele) => {
-                                return (
-                                  <option value={ele._id}>
-                                    {ele.state_name}
-                                  </option>
-                                );
-                              })
+                                  return (
+                                    <option value={ele._id}>
+                                      {ele.state_name}
+                                    </option>
+                                  );
+                                })
                               : ""}
                           </select>
 
@@ -710,12 +724,12 @@ const Billing = () => {
                             <option value="">---select city---</option>
                             {cityListBill.length > 0
                               ? cityListBill.map((ele) => {
-                                return (
-                                  <option value={ele._id}>
-                                    {ele.city_name}
-                                  </option>
-                                );
-                              })
+                                  return (
+                                    <option value={ele._id}>
+                                      {ele.city_name}
+                                    </option>
+                                  );
+                                })
                               : ""}
                           </select>
                           {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -803,6 +817,7 @@ const Billing = () => {
                                 billing_address: e.target.value,
                               });
                             }}
+                            required
                           ></textarea>
                         </div>
                       </div>
@@ -814,10 +829,9 @@ const Billing = () => {
                           borderRadius: "0px",
                           fontSize: "13px",
                         }}
-                        onClick={(e) => {
-                          setPay(true);
-                          setBill(false);
-                        }}
+                        // onClick={(e) => {
+
+                        // }}
                       >
                         Save & Continue
                       </button>
@@ -1075,7 +1089,7 @@ const Billing = () => {
                         ₹
                         {parseFloat(product?.mrp) +
                           ((100 - parseFloat(product?.discount)) / 100) *
-                          product?.tax}
+                            product?.tax}
                       </div>
                     </div>
                   </div>
@@ -1112,24 +1126,20 @@ const Billing = () => {
                       })}
                     </tbody>
                     <br />
-
-
-
                   </table>
-                  <div className='w-100 d-flex mt-4'>
+                  <div className="w-100 d-flex mt-4">
                     <h6>SubTotal:</h6>
-                    <h6 className='ms-auto'>{subtotal}</h6>
-
+                    <h6 className="ms-auto">{subtotal}</h6>
                   </div>
-                  <div className='w-100 d-flex '>
+                  <div className="w-100 d-flex ">
                     <h6>Shipping:</h6>
-                    <h6 className='ms-auto'>{setting?.shipping_charges}</h6>
-
+                    <h6 className="ms-auto">{setting?.shipping_charges}</h6>
                   </div>
-                  <div className='w-100 d-flex mb-3'>
+                  <div className="w-100 d-flex mb-3">
                     <h6> Final Total:</h6>
-                    <h6 className='ms-auto'>{(subtotal + setting?.shipping_charges).toFixed(2)}</h6>
-
+                    <h6 className="ms-auto">
+                      {(subtotal + setting?.shipping_charges).toFixed(2)}
+                    </h6>
                   </div>
                 </div>
               ) : (
@@ -1209,7 +1219,7 @@ const Billing = () => {
               //   );
               // })
             }
-            {pay ? (
+            {pay && paymentMethod ? (
               <Button
                 variant="contained"
                 className="p-3 px-5 w-100"

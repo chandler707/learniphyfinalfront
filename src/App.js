@@ -64,7 +64,7 @@ function App() {
           <Route path="/material" element={<Material />} />
           <Route path="/circular" element={<Circular />} />
           <Route path="/Shipping" element={<Shipping />} />
-          <Route path="/orderdetails" element={<OrderDetails />} />
+          <Route path="/orderdetails/:id" element={<OrderDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/terms" element={<Term />} />
         </Routes>

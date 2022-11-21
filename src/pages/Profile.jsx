@@ -262,7 +262,11 @@ const Profile = () => {
                           type="text"
                           class="form-control p-2"
                           id="exampleInputEmail1"
-                          defaultValue={userdata ? userdata.fname : ""}
+                          defaultValue={
+                            userdata
+                              ? userdata?.fname + " " + userdata?.lname
+                              : ""
+                          }
                           onChange={(e) => setName(e.target.value)}
                           placeholder="Enter Your Full Name"
                           aria-describedby="emailHelp"
@@ -836,7 +840,7 @@ const Profile = () => {
                               <td>{element?.total?.toFixed(2)}</td>
                               <td>{element?.order_status}</td>
                               <td>
-                                <Link to={`/order/edit/${element._id}`}>
+                                <Link to={`/orderdetails/${element._id}`}>
                                   <i className="fas fa-edit"></i>
                                 </Link>{" "}
                               </td>
