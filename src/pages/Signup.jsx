@@ -137,7 +137,7 @@ const Signup = () => {
                                 </div>
                                 <div class="mb-2">
                                     <label for="exampleInputPassword1" style={{ fontSize: "13px" }} class="form-label text-dark mb-0">Phone Number</label>
-                                    <input type="number" class="form-control p-2" placeholder='Enter Your Phone Number' id="exampleInputPassword1" style={{ borderRadius: "0px" }} onChange={(e) => setMobile(e.target.value)} required />
+                                    <input type="tel" class="form-control p-2" placeholder='Enter Your Phone Number' id="exampleInputPassword1" style={{ borderRadius: "0px" }} onChange={(e) => setMobile(e.target.value)} maxLength="10" required />
                                 </div>
                                 <div className="row">
                                     <div className="col-sm-6 m-0">

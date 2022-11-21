@@ -32,6 +32,8 @@ import Material from "./pages/Material";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import Shipping from "./pages/Shipping";
 import OrderDetails from "./pages/OrderDetails";
+import About from "./pages/About";
+import Term from "./pages/Term";
 
 function App() {
   return (
@@ -62,7 +64,9 @@ function App() {
           <Route path="/material" element={<Material />} />
           <Route path="/circular" element={<Circular />} />
           <Route path="/Shipping" element={<Shipping />} />
-          <Route path="/orderdetails" element={<OrderDetails/>}/>
+          <Route path="/orderdetails" element={<OrderDetails />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/terms" element={<Term />} />
         </Routes>
       </Router>
     </>

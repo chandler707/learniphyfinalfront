@@ -232,6 +232,53 @@ export function addFeedback(payload) {
     } catch (error) {}
   });
 }
+export function get_about(payload) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await Repository.post(
+        `${baseUrl}/get_about`,
+        payload
+      );
+
+      return resolve(response.data);
+    } catch (error) {}
+  });
+}
+export function get_contact(payload) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await Repository.post(
+        `${baseUrl}/get_contact`,
+        payload
+      );
+
+      return resolve(response.data);
+    } catch (error) {}
+  });
+}export function get_privacy(payload) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await Repository.post(
+        `${baseUrl}/get_privacy`,
+        payload
+      );
+
+      return resolve(response.data);
+    } catch (error) {}
+  });
+}export function get_term(payload) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await Repository.post(
+        `${baseUrl}/get_term`,
+        payload
+      );
+
+      return resolve(response.data);
+    } catch (error) {}
+  });
+}
+
 
 // export function userLogin(payload) {
 //   return new Promise(async (resolve, reject) => {

@@ -1,8 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from "../images/Logo.png";
-
-
 const Footer = () => {
     return (
         <>
@@ -14,16 +12,13 @@ const Footer = () => {
                     </div>
                     <div className="col-sm-3">
                         <div className='m-2'>
-                            <Link className='text-light text-decoration-none ' to="/">Book Business</Link>
+                            <Link className='text-light text-decoration-none ' to="/books">Book Business</Link>
                         </div>
                         <div className='m-2'>
-                            <Link className='text-light text-decoration-none ' to="/">Sell on Book</Link>
+                            <a href='https://play.google.com/store/games' className='text-light text-decoration-none ' >Get the app</a>
                         </div>
                         <div className='m-2'>
-                            <Link className='text-light text-decoration-none ' to="/">Get the app</Link>
-                        </div>
-                        <div className='m-2'>
-                            <Link className='text-light text-decoration-none ' to="/">About us</Link>
+                            <Link className='text-light text-decoration-none ' to="/about">About us</Link>
                         </div>
                         <div className='m-2'>
                             <Link className='text-light text-decoration-none ' to="/contact">Contact us</Link>
@@ -32,12 +27,7 @@ const Footer = () => {
 
                     </div>
                     <div className="col-sm-3">
-                        <div className='m-2'>
-                            <Link className='text-light text-decoration-none'>Careers</Link>
-                        </div>
-                        <div className='m-2'>
-                            <Link className='text-light text-decoration-none'>Blog</Link>
-                        </div>
+
                         <div className='m-2'>
                             <Link className='text-light text-decoration-none'>Help and Support</Link>
                         </div>
@@ -51,20 +41,13 @@ const Footer = () => {
                     </div>
                     <div className="col-sm-3">
                         <div className='m-2'>
-                            <Link className='text-light text-decoration-none'>Terms</Link>
+                            <Link className='text-light text-decoration-none' to="/terms">Terms & Conditions</Link>
                         </div>
                         <div className='m-2'>
                             <Link className='text-light text-decoration-none'>Privacy policy</Link>
                         </div>
-                        <div className='m-2'>
-                            <Link className='text-light text-decoration-none'>Cookie settings</Link>
-                        </div>
-                        <div className='m-2'>
-                            <Link className='text-light text-decoration-none'>Sitemap</Link>
-                        </div>
-                        <div className='m-2'>
-                            <Link className='text-light text-decoration-none'>Accessibility statement</Link>
-                        </div>
+
+
                     </div>
 
                 </div>
