@@ -6,10 +6,11 @@ import { get_content } from "../Repository/UserRepository";
 import { app_id } from "../Repository/Repository";
 import { pdf } from "../Repository/Repository";
 import { useLocation } from "react-router-dom";
+import HashLoader from "react-spinners/HashLoader";
 
 const Notification = () => {
   const [pdfList, setPdfList] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const opendoc = (e, url) => {
     window.open(pdf + url, "_blank");
   };
@@ -17,6 +18,7 @@ const Notification = () => {
   useEffect(() => {
     let type = window.location.pathname.split("/").pop();
     const GetPdf = async () => {
+      setLoading(true)
       let res = await get_content({
         app_id: app_id,
         page: 1,
@@ -24,6 +26,7 @@ const Notification = () => {
         type: type,
       });
       if (res && res?.status === 1) {
+        setLoading(false)
         setPdfList(res?.data);
       }
     };
@@ -34,29 +37,42 @@ const Notification = () => {
       <Navbar />
       <div className="container">
         <div className="row">
-          {pdfList && pdfList.length > 0
-            ? pdfList.map((pdf, index) => {
+          {pdfList && pdfList.length > 0 ? (
+            pdfList.map((pdf, index) => {
               return (
-                <Link>
-                  <div className="col-sm-3">
-                    <div className="card border-0 bg-light shadow-sm mb-3">
+
+                <div className="col-sm-3 notification mt-3">
+                  <Link className="text-decoration-none" onClick={(e) => opendoc(e, pdf.pdf_url)} >
+                    <div className="card border-0 bg-light shadow-sm mb-3 p-5">
                       <div className="content ms-2">
                         <h6
-                          className="mt-2 mb-0 fw-bold"
+                          className="mt-2 mb-0 fw-bold text-center "
                           style={{
                             fontFamily: "segoe ui symbol",
                           }}
-                          onClick={(e) => opendoc(e, pdf.pdf_url)}
+
                         >
                           {pdf?.name}
                         </h6>
                       </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
+
               );
             })
-            : ""}
+          ) : (
+            <div style={{ textAlign: "center", color: "black" }}>
+              <div className='pt-5 '>
+                <HashLoader className='ms-auto me-auto mt-5' size={45} color="#640513" />
+              </div>
+              <p style={{
+                fontFamily: "segoe ui symbol"
+              }} className='mt-2 fw-bold'>Please Wait</p>
+            </div>
+          )
+          }
+
         </div>
       </div>
       <Footer />
