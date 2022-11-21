@@ -156,10 +156,10 @@ const Billing = () => {
                 finalAmount =
                   finalAmount +
                   ele.qty *
-                    ((parseFloat(ele?.mrp) *
-                      ((100 - parseFloat(ele?.discount)) / 100) *
-                      (100 + ele?.tax)) /
-                      100);
+                  ((parseFloat(ele?.mrp) *
+                    ((100 - parseFloat(ele?.discount)) / 100) *
+                    (100 + ele?.tax)) /
+                    100);
               });
             }
           }
@@ -213,10 +213,10 @@ const Billing = () => {
             finalAmount =
               finalAmount +
               ele.qty *
-                ((parseFloat(ele?.mrp) *
-                  ((100 - parseFloat(ele?.discount)) / 100) *
-                  (100 + ele?.tax)) /
-                  100);
+              ((parseFloat(ele?.mrp) *
+                ((100 - parseFloat(ele?.discount)) / 100) *
+                (100 + ele?.tax)) /
+                100);
           });
         }
       }
@@ -287,7 +287,7 @@ const Billing = () => {
     window.scrollTo(0, 0);
     states();
   }, []);
-  const submitCheckout = async () => {};
+  const submitCheckout = async () => { };
   useEffect(() => {
     setShip(true);
 
@@ -303,7 +303,7 @@ const Billing = () => {
                 element.qty *
                 (100 - parseFloat(element.discount)) *
                 (100 + parseFloat(element.tax))) /
-                10000;
+              10000;
           });
           setSubtotal(sub);
         }
@@ -441,7 +441,7 @@ const Billing = () => {
                             State
                           </label>
                           <select
-                            class="form-control p-3"
+                            class="form-control p-2"
                             id="exampleInputEmail1"
                             placeholder="Enter Your State "
                             aria-describedby="emailHelp"
@@ -466,12 +466,12 @@ const Billing = () => {
                             <option value="">---select state---</option>
                             {stateList.length > 0
                               ? stateList.map((ele) => {
-                                  return (
-                                    <option value={ele._id}>
-                                      {ele.state_name}
-                                    </option>
-                                  );
-                                })
+                                return (
+                                  <option value={ele._id}>
+                                    {ele.state_name}
+                                  </option>
+                                );
+                              })
                               : ""}
                           </select>
                           {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -485,7 +485,7 @@ const Billing = () => {
                             City
                           </label>
                           <select
-                            class="form-control p-3"
+                            class="form-control p-2"
                             id="exampleInputEmail1"
                             placeholder="Enter Your City "
                             value={addressData?.shipping_city}
@@ -502,12 +502,12 @@ const Billing = () => {
                             <option value="">---select city---</option>
                             {cityListShip.length > 0
                               ? cityListShip.map((ele) => {
-                                  return (
-                                    <option value={ele._id}>
-                                      {ele.city_name}
-                                    </option>
-                                  );
-                                })
+                                return (
+                                  <option value={ele._id}>
+                                    {ele.city_name}
+                                  </option>
+                                );
+                              })
                               : ""}
                           </select>
                           {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -527,7 +527,7 @@ const Billing = () => {
                             defaultValue={
                               addressData ? addressData.shipping_pin_code : ""
                             }
-                            class="form-control p-3"
+                            class="form-control p-2"
                             id="exampleInputEmail1"
                             placeholder="Enter Your Pincode "
                             aria-describedby="emailHelp"
@@ -552,7 +552,7 @@ const Billing = () => {
                           </label>
                           <input
                             type="text"
-                            class="form-control p-3"
+                            class="form-control p-2"
                             id="exampleInputEmail1"
                             placeholder="Enter Your Locality/Landmark  "
                             aria-describedby="emailHelp"
@@ -637,7 +637,7 @@ const Billing = () => {
                     <form
                       action=""
                       onSubmit={submitDataAddress}
-                      className="mt-5"
+                      className=""
                     >
                       <div className="row">
                         <div class="mb-3 col-sm-6">
@@ -649,7 +649,7 @@ const Billing = () => {
                             State
                           </label>
                           <select
-                            class="form-control p-3"
+                            class="form-control p-2"
                             id="exampleInputEmail1"
                             placeholder="Enter Your State "
                             aria-describedby="emailHelp"
@@ -673,12 +673,12 @@ const Billing = () => {
                             <option value="">---select state---</option>
                             {stateList.length > 0
                               ? stateList.map((ele) => {
-                                  return (
-                                    <option value={ele._id}>
-                                      {ele.state_name}
-                                    </option>
-                                  );
-                                })
+                                return (
+                                  <option value={ele._id}>
+                                    {ele.state_name}
+                                  </option>
+                                );
+                              })
                               : ""}
                           </select>
 
@@ -693,7 +693,7 @@ const Billing = () => {
                             City
                           </label>
                           <select
-                            class="form-control p-3"
+                            class="form-control p-2"
                             id="exampleInputEmail1"
                             placeholder="Enter Your City "
                             aria-describedby="emailHelp"
@@ -710,12 +710,12 @@ const Billing = () => {
                             <option value="">---select city---</option>
                             {cityListBill.length > 0
                               ? cityListBill.map((ele) => {
-                                  return (
-                                    <option value={ele._id}>
-                                      {ele.city_name}
-                                    </option>
-                                  );
-                                })
+                                return (
+                                  <option value={ele._id}>
+                                    {ele.city_name}
+                                  </option>
+                                );
+                              })
                               : ""}
                           </select>
                           {/* <div id="emailHelp" class="form-text" style={{ fontSize: "11px" }}>We'll never share your email with anyone else.</div> */}
@@ -732,7 +732,7 @@ const Billing = () => {
                           </label>
                           <input
                             type="text"
-                            class="form-control p-3"
+                            class="form-control p-2"
                             id="exampleInputEmail1"
                             placeholder="Enter Your Pincode "
                             aria-describedby="emailHelp"
@@ -760,7 +760,7 @@ const Billing = () => {
                           </label>
                           <input
                             type="text"
-                            class="form-control p-3"
+                            class="form-control p-2"
                             id="exampleInputEmail1"
                             placeholder="Enter Your Locality/Landmark  "
                             aria-describedby="emailHelp"
@@ -849,7 +849,7 @@ const Billing = () => {
                     >
                       <li class="nav-item" role="presentation">
                         <button
-                          class="nav-link active"
+                          class="nav-link fw-bold"
                           id="pills-home-tab"
                           data-bs-toggle="pill"
                           data-bs-target="#pills-home"
@@ -858,13 +858,14 @@ const Billing = () => {
                           aria-controls="pills-home"
                           aria-selected="true"
                           onClick={(e) => setPaymentMethod("cod")}
+                          style={{ borderRadius: "0px" }}
                         >
                           Cash On Delivery
                         </button>
                       </li>
                       <li class="nav-item" role="presentation">
                         <button
-                          class="nav-link"
+                          class="nav-link fw-bold"
                           id="pills-profile-tab"
                           data-bs-toggle="pill"
                           data-bs-target="#pills-profile"
@@ -873,6 +874,7 @@ const Billing = () => {
                           aria-controls="pills-profile"
                           aria-selected="false"
                           onClick={(e) => setPaymentMethod("razorpay")}
+                          style={{ borderRadius: "0px" }}
                         >
                           Razorpay
                         </button>
@@ -1073,7 +1075,7 @@ const Billing = () => {
                         ₹
                         {parseFloat(product?.mrp) +
                           ((100 - parseFloat(product?.discount)) / 100) *
-                            product?.tax}
+                          product?.tax}
                       </div>
                     </div>
                   </div>
@@ -1110,21 +1112,25 @@ const Billing = () => {
                       })}
                     </tbody>
                     <br />
-                    <tr>
-                      <th>SubTotal</th>
-                      <td>{subtotal}</td>
-                    </tr>
-                    <tr>
-                      <th> Shipping</th>
-                      <td>{setting?.shipping_charges}</td>
-                    </tr>
-                    <tr>
-                      <th> Final Total</th>
-                      <td>
-                        {(subtotal + setting?.shipping_charges).toFixed(2)}
-                      </td>
-                    </tr>
+
+
+
                   </table>
+                  <div className='w-100 d-flex mt-4'>
+                    <h6>SubTotal:</h6>
+                    <h6 className='ms-auto'>{subtotal}</h6>
+
+                  </div>
+                  <div className='w-100 d-flex '>
+                    <h6>Shipping:</h6>
+                    <h6 className='ms-auto'>{setting?.shipping_charges}</h6>
+
+                  </div>
+                  <div className='w-100 d-flex mb-3'>
+                    <h6> Final Total:</h6>
+                    <h6 className='ms-auto'>{(subtotal + setting?.shipping_charges).toFixed(2)}</h6>
+
+                  </div>
                 </div>
               ) : (
                 "no data"
@@ -1206,7 +1212,7 @@ const Billing = () => {
             {pay ? (
               <Button
                 variant="contained"
-                className="p-3 px-5 m-2"
+                className="p-3 px-5 w-100"
                 onClick={displayRazorpay}
               >
                 {" "}
